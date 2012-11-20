@@ -12,6 +12,8 @@ namespace KineticsAnalyzer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly int Bgr32BytesPerPixel = (PixelFormats.Bgr32.BitsPerPixel + 7) / 8;
+
         /// <summary>
         /// Kinect sensor used to capture depth data
         /// </summary>
@@ -54,6 +56,8 @@ namespace KineticsAnalyzer
             if (this.kinectSensor != null)
             {
                 kinectSensor.DepthStream.Enable(DepthImageFormat.Resolution640x480Fps30);
+                kinectSensor.SkeletonStream.Enable();
+
                 depthImagePixels = new DepthImagePixel[kinectSensor.DepthStream.FramePixelDataLength];
                 colorPixels = new byte[kinectSensor.DepthStream.FramePixelDataLength * sizeof(int)];
                 depthImageBitmap = new WriteableBitmap(kinectSensor.DepthStream.FrameWidth,
@@ -84,34 +88,31 @@ namespace KineticsAnalyzer
 
         private void KinectSensorDepthFrameReady(object sender, DepthImageFrameReadyEventArgs e)
         {
+            int imageWidth = 0;
+            int imageHeight = 0;
+            int minDepth = 0;
+            int maxDepth = 0;
+
             using (DepthImageFrame depthFrame = e.OpenDepthImageFrame())
             {
                 if (depthFrame != null)
                 {
+                    imageWidth = depthFrame.Width;
+                    imageHeight = depthFrame.Height;
+
                     depthFrame.CopyDepthImagePixelDataTo(depthImagePixels);
 
-                    int minDepth = depthFrame.MinDepth;
-                    int maxDepth = depthFrame.MaxDepth;
+                    minDepth = depthFrame.MinDepth;
+                    maxDepth = depthFrame.MaxDepth;
+                }
 
-                    int colorPixelIndex = 0;
-                    for (int i = 0; i < depthImagePixels.Length; ++i)
-                    {
-                        short depth = depthImagePixels[i].Depth;
-
-                        byte intensity = (byte)(depth >= minDepth && depth <= maxDepth ? depth : 0);
-
-                        colorPixels[colorPixelIndex++] = intensity;
-                        colorPixels[colorPixelIndex++] = intensity;
-                        colorPixels[colorPixelIndex++] = intensity;
-
-                        // not using alpha channel at this point, so skip the A part of BGRA by incrementing
-                        // colorPixelIndex.
-                        colorPixelIndex++;
-                    }
+                if (imageWidth != 0)
+                {
+                    DepthColorizer.ConvertDepthFrame(depthImagePixels, minDepth, maxDepth, colorPixels);
 
                     depthImageBitmap.WritePixels(
-                        new Int32Rect(0, 0, depthImageBitmap.PixelWidth, depthImageBitmap.PixelHeight),
-                        colorPixels, depthImageBitmap.PixelWidth * sizeof(int), 0);
+                        new Int32Rect(0, 0, imageWidth, imageHeight),
+                        colorPixels, imageWidth * Bgr32BytesPerPixel, 0);
                 }
             }
         }
