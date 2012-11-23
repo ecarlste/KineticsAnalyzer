@@ -9,7 +9,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center">
-            <Image x:Name="DepthImage" Width="640" Height="469"/>
+            <Image x:Name="DepthImage" Width="640" Height="480"/>
         </Viewbox>
         <StatusBar Grid.Row="1">
             <StatusBarItem>
