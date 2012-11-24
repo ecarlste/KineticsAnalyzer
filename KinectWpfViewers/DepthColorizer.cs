@@ -18,17 +18,17 @@ namespace Microsoft.Samples.Kinect.WpfViewers
         /// <summary>
         /// Red component shifts for tinting players.
         /// </summary>
-        private static readonly int[] IntensityShiftByPlayerR = { 0, 2, 0, 2, 0, 0, 2, 0 };
+        private static readonly int[] IntensityShiftByPlayerR = { 8, 2, 2, 2, 2, 2, 2, 2 };
 
         /// <summary>
         /// Green component shifts for tinting players.
         /// </summary>
-        private static readonly int[] IntensityShiftByPlayerG = { 0, 2, 2, 0, 2, 0, 0, 0 };
+        private static readonly int[] IntensityShiftByPlayerG = { 8, 0, 0, 0, 0, 0, 0, 0 };
 
         /// <summary>
         /// Blue component shifts for tinting players.
         /// </summary>
-        private static readonly int[] IntensityShiftByPlayerB = { 0, 0, 2, 2, 0, 2, 0, 0 };
+        private static readonly int[] IntensityShiftByPlayerB = { 8, 2, 2, 2, 2, 2, 2, 2 };
 
         /// <summary>
         /// Color to represent unknown depth.
@@ -77,12 +77,12 @@ namespace Microsoft.Samples.Kinect.WpfViewers
         /// <summary>
         /// The nearest depth (in millimeters) to be rendered with a gradient.
         /// </summary>
-        private const int MinMinDepth = 400;
+        private const int MinMinDepth = 800;
 
         /// <summary>
         /// The furthest depth (in millimeters) to be rendered with a gradient.
         /// </summary>
-        private const int MaxMaxDepth = 16383;
+        private const int MaxMaxDepth = 4000;
 
         /// <summary>
         /// The sentinel depth value indicating unknown depth.

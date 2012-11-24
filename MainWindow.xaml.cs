@@ -91,6 +91,7 @@ namespace KineticsAnalyzer
             kinectSensorManager.SkeletonStreamEnabled = true;
             kinectSensorManager.DepthStreamEnabled = true;
             
+            
             kinectSensorManager.DepthFormat = DepthImageFormat.Resolution640x480Fps30;
 
             // Set statusbar to ready
