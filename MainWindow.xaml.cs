@@ -136,5 +136,10 @@ namespace KineticsAnalyzer
         {
             this.KinectSensorManager.KinectSensor = null;
         }
+
+        private void beginButton_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
