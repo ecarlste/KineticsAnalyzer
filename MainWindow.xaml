@@ -12,7 +12,13 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center">
-            <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True" KinectSensorManager="{Binding}" />
+            <Grid>
+                <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True"
+                                      KinectSensorManager="{Binding}" />
+                <Canvas>
+                    <TextBlock Foreground="#FF708393" FontSize="48">5</TextBlock>
+                </Canvas>
+            </Grid>
         </Viewbox>
         <Button Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0" MouseLeftButtonUp="beginButton_MouseLeftButtonUp">
             <TextBlock HorizontalAlignment="Center">Begin Test</TextBlock>
