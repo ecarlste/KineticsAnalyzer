@@ -2,10 +2,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Toolkit="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
         xmlns:kt="clr-namespace:Microsoft.Samples.Kinect.WpfViewers;assembly=Microsoft.Samples.Kinect.WpfViewers"
-        x:Class="KineticsAnalyzer.MainWindow" Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded"
+        x:Class="KineticsAnalyzer.MainWindow" Title="MainWindow" Height="350" Width="750" Loaded="Window_Loaded"
         Closed="WindowClosed" Closing="WindowClosing">
         
-    <Grid>
+    <Grid Margin="0,0,224,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
@@ -22,7 +22,8 @@
         <Toolkit:KinectSensorChooserUI Grid.Row="2" x:Name="SensorChooserUI" IsListening="True"
                                        HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom"
                                        Height="44" Width="55"/>
-       
+        <kt:KinectSettings Margin="523,0,-222,0" VerticalAlignment="Top" Height="320" Grid.RowSpan="3" HorizontalAlignment="Right" Width="217"/>
+
 
     </Grid>
 
