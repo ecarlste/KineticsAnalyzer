@@ -266,12 +266,13 @@
 
                     <TextBlock Style="{StaticResource KinectTextBlock}" Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" VerticalAlignment="Center" FontSize="{StaticResource LabelFontSize}" Text="{Binding KinectSensorManager.ElevationAngle, StringFormat=\{0:F0\}°}"/>
                 </Grid>
-
+                <!-- 
                 <Label Content="Infrared Emitter" Style="{StaticResource KinectLabel}"/>
                 <CheckBox
                     Content="Force Off"
                     Style="{StaticResource KinectCheckBox}"
                     IsChecked="{Binding KinectSensorManager.ForceInfraredEmitterOff}"/>
+                -->
             </StackPanel>
         </RadioButton>
         <!--
