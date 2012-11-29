@@ -19,8 +19,9 @@
     <StackPanel x:Name="ViewModelRoot" Orientation="Vertical" Margin="0,0,0,0">
 
         <!-- Not visible, this control will manage choosing skeletons -->
-        <kt:KinectSkeletonChooser x:Name="SkeletonChooser" KinectSensorManager="{Binding KinectSensorManager}"/>
+        
         <!--
+        <kt:KinectSkeletonChooser x:Name="SkeletonChooser" KinectSensorManager="{Binding KinectSensorManager}"/>
         <RadioButton Tag="_Color Stream" Style="{StaticResource KinectSettingsPanel}" Margin="0 0 0 10">
             <ListBox
                 Style="{StaticResource KinectRadioList}"
