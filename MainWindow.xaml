@@ -7,7 +7,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Microsoft.Samples.Kinect.WpfViewers;component/KinectControlResources.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/KinectWpfViewers;component/KinectControlResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
