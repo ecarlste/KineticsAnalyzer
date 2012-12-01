@@ -6,8 +6,8 @@
     <ProjectGuid>{4DE23893-27E7-423F-9BB6-BA21DAC2C45E}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Microsoft.Samples.Kinect.WpfViewers</RootNamespace>
-    <AssemblyName>Microsoft.Samples.Kinect.WpfViewers</AssemblyName>
+    <RootNamespace>KinectWpfViewers</RootNamespace>
+    <AssemblyName>KinectWpfViewers</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
