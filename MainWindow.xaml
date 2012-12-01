@@ -4,6 +4,13 @@
         xmlns:kt="clr-namespace:Microsoft.Samples.Kinect.WpfViewers;assembly=Microsoft.Samples.Kinect.WpfViewers"
         x:Class="KineticsAnalyzer.MainWindow" Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded"
         Closed="WindowClosed" Closing="WindowClosing">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Microsoft.Samples.Kinect.WpfViewers;component/KinectControlResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
         
     <Grid>
         <Grid.RowDefinitions>
@@ -11,8 +18,19 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center">
-            <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True" KinectSensorManager="{Binding}" />
+        <Viewbox Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
+            <Grid>
+                <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True"
+                                      KinectSensorManager="{Binding}" />
+                <Canvas>
+                    <kt:KinectSkeletonViewer 
+                        KinectSensorManager="{Binding}"
+                        Visibility="{Binding DepthStreamEnabled,Converter={StaticResource BoolToVisibilityConverter}}"
+                        Width="{Binding ElementName=DepthViewer,Path=ActualWidth}"
+                        Height="{Binding ElementName=DepthViewer,Path=ActualHeight}"
+                        ShowBones="True" ShowJoints="True" ShowCenter="True" ImageType="Depth" />
+                </Canvas>
+                </Grid>
         </Viewbox>
         <StatusBar Grid.Row="1">
             <StatusBarItem>
