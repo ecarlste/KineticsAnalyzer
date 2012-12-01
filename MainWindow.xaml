@@ -4,27 +4,34 @@
         xmlns:kt="clr-namespace:Microsoft.Samples.Kinect.WpfViewers;assembly=Microsoft.Samples.Kinect.WpfViewers"
         x:Class="KineticsAnalyzer.MainWindow" Title="MainWindow" Height="350" Width="750" Loaded="Window_Loaded"
         Closed="WindowClosed" Closing="WindowClosing">
-        
-    <Grid Margin="0,0,224,0">
+    <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Viewbox Grid.Row="0" Stretch="Uniform" HorizontalAlignment="Center">
-            <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True" KinectSensorManager="{Binding}" />
-        </Viewbox>
+        
+        <Grid Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0" Stretch="Uniform" HorizontalAlignment="Center">
+                <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True" KinectSensorManager="{Binding}" />
+            </Viewbox>
+            <StackPanel Grid.Column="1">
+                <kt:KinectSettings KinectSensorManager="{Binding}" Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" Width="217"/>
+                <Toolkit:KinectSensorChooserUI x:Name="SensorChooserUI" IsListening="True"
+                                       HorizontalAlignment="Center" Margin="0,0,0,0"
+                                       Height="44" Width="55"/>
+            </StackPanel>
+            </Grid>
+        
         <StatusBar Grid.Row="1">
             <StatusBarItem>
                 <TextBlock x:Name="statusBarText" />
             </StatusBarItem>
         </StatusBar>
-        <Toolkit:KinectSensorChooserUI Grid.Row="2" x:Name="SensorChooserUI" IsListening="True"
-                                       HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Bottom"
-                                       Height="44" Width="55"/>
-        <kt:KinectSettings KinectSensorManager="{Binding}" Margin="523,0,-222,0" VerticalAlignment="Top" Height="320" Grid.RowSpan="3" HorizontalAlignment="Right" Width="217"/>
-
-
     </Grid>
+    
 
 </Window>
