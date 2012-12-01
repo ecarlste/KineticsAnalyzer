@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
-using Microsoft.Samples.Kinect.WpfViewers;
+using KinectWpfViewers;
 
 namespace KineticsAnalyzer
 {

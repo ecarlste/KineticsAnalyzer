@@ -4,7 +4,7 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-namespace Microsoft.Samples.Kinect.WpfViewers
+namespace KinectWpfViewers
 {
     using System;
     using System.Diagnostics;
