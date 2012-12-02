@@ -38,6 +38,10 @@ namespace KinectWpfViewers
                 typeof(KinectSkeleton),
                 new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
 
+        public static readonly DependencyProperty JointBrushesProperty =
+            DependencyProperty.Register("JointBrushes", typeof(Dictionary<JointType, Brush>), typeof(KinectSkeleton),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
+
         public static readonly DependencyProperty JointMappingsProperty =
             DependencyProperty.Register(
                 "JointMappings",
@@ -111,6 +115,12 @@ namespace KinectWpfViewers
         {
             get { return (Skeleton)GetValue(SkeletonProperty); }
             set { SetValue(SkeletonProperty, value); }
+        }
+
+        public Dictionary<JointType, Brush> JointBrushes
+        {
+            get { return (Dictionary<JointType, Brush>)GetValue(JointBrushesProperty); }
+            set { SetValue(JointBrushesProperty, value); }
         }
 
         public Dictionary<JointType, JointMapping> JointMappings
