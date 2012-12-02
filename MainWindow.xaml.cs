@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
-using Microsoft.Samples.Kinect.WpfViewers;
+using KinectWpfViewers;
 
 namespace KineticsAnalyzer
 {
@@ -135,6 +135,11 @@ namespace KineticsAnalyzer
         private void WindowClosed(object sender, EventArgs e)
         {
             this.KinectSensorManager.KinectSensor = null;
+        }
+
+        private void beginButton_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+
         }
     }
 }
