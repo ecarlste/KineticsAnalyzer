@@ -13,6 +13,7 @@ namespace KinectWpfViewers
     {
         public void analyze(Skeleton skeleton)
         {
+            // measure left knee flexion
             Joint leftAnkle = skeleton.Joints[JointType.AnkleLeft];
             Joint leftKnee = skeleton.Joints[JointType.KneeLeft];
             Joint leftHip = skeleton.Joints[JointType.HipLeft];
@@ -31,7 +32,28 @@ namespace KinectWpfViewers
             leftLegLower.Normalize();
             leftLegUpper.Normalize();
 
-            double angle = Vector3D.AngleBetween(leftLegLower, leftLegUpper);
+            double leftKneeFlexion = Vector3D.AngleBetween(leftLegLower, leftLegUpper);
+
+            // measure right knee flexion
+            Joint rightAnkle = skeleton.Joints[JointType.AnkleRight];
+            Joint rightKnee = skeleton.Joints[JointType.KneeRight];
+            Joint rightHip = skeleton.Joints[JointType.HipRight];
+
+            Vector3D rightLegLower = new Vector3D(
+                    rightAnkle.Position.X - rightKnee.Position.X,
+                    rightAnkle.Position.Y - rightKnee.Position.Y,
+                    rightAnkle.Position.Z - rightKnee.Position.Z
+                );
+            Vector3D rightLegUpper = new Vector3D(
+                    rightHip.Position.X - rightKnee.Position.X,
+                    rightHip.Position.Y - rightKnee.Position.Y,
+                    rightHip.Position.Z - rightKnee.Position.Z
+                );
+
+            rightLegLower.Normalize();
+            rightLegUpper.Normalize();
+
+            double rightKneeFlexion = Vector3D.AngleBetween(rightLegLower, rightLegUpper);
         }
     }
 }
