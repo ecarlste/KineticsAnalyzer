@@ -3,6 +3,16 @@ namespace KinectSkeletonAnalyzer
 {
     public enum TestType
     {
-        DoubleLegSquat
+        DoubleLegSquat,
+        SingleLegSquatLeft,
+        SingleLegSquatRight,
+        SingleLegBalanceLeft,
+        SingleLegBalanceRight,
+        DoubleLegVerticalJumpLand,
+        FrontalLungeLeft,
+        FrontalLungeRight,
+        CrossoverCut,
+        SingleLegVerticalJumpLandLeft,
+        SingleLegVerticalJumpLandRight
     }
 }
