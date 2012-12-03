@@ -18,9 +18,15 @@ namespace KinectWpfViewers
             KneeFlexionLeft,
             KneeFlexionRight,
             HipFlexionLeft,
-            HipFlexionRight
+            HipFlexionRight,
+            KneeValgusLeft,
+            KneeValgusRight
         };
 
+        public SkeletonAnalyzer()
+        {
+            testMeasurements = new Dictionary<TestMeasurementType, double>();
+        }
 
         public void analyze(Skeleton skeleton)
         {
@@ -39,7 +45,7 @@ namespace KinectWpfViewers
             #endregion
 
             #region Measure Left Knee Flexion
-            Vector3D leftLegLower = new Vector3D(
+            Vector3D lowerLegLeft = new Vector3D(
                     ankleLeft.Position.X - kneeLeft.Position.X,
                     ankleLeft.Position.Y - kneeLeft.Position.Y,
                     ankleLeft.Position.Z - kneeLeft.Position.Z
@@ -50,10 +56,10 @@ namespace KinectWpfViewers
                     hipLeft.Position.Z - kneeLeft.Position.Z
                 );
 
-            leftLegLower.Normalize();
+            lowerLegLeft.Normalize();
             upperLegLeft.Normalize();
 
-            testMeasurements[TestMeasurementType.KneeFlexionLeft] = 180.0 - Vector3D.AngleBetween(leftLegLower, upperLegLeft);
+            testMeasurements[TestMeasurementType.KneeFlexionLeft] = 180.0 - Vector3D.AngleBetween(lowerLegLeft, upperLegLeft);
             #endregion
 
             #region Measure Right Knee Flexion
@@ -85,6 +91,34 @@ namespace KinectWpfViewers
 
             testMeasurements[TestMeasurementType.HipFlexionLeft] = 180.0 - Vector3D.AngleBetween(backLower, upperLegLeft);
             testMeasurements[TestMeasurementType.HipFlexionRight] = 180.0 - Vector3D.AngleBetween(backLower, upperLegRight);
+            #endregion
+
+            #region Measure Knee Valgus
+            Vector3D hipAsis = new Vector3D(
+                    hipLeft.Position.X - hipRight.Position.X,
+                    hipLeft.Position.Y - hipRight.Position.Y,
+                    hipLeft.Position.Z - hipRight.Position.Z
+                );
+
+            hipAsis.Normalize();
+
+            Vector3D up = new Vector3D(0.0, 1.0, 0.0);
+
+            // get the normal vector that represents the plane in which up and
+            // hipAsis are contained within, then normalize it
+            Vector3D planeNormal = Vector3D.CrossProduct(up, hipAsis);
+            planeNormal.Normalize();
+
+            // determine both upper and 
+            Vector3D upperLegLeftProjected = upperLegLeft - Vector3D.DotProduct(upperLegLeft, planeNormal) * planeNormal;
+            Vector3D lowerLegLeftProjected = lowerLegLeft - Vector3D.DotProduct(lowerLegLeft, planeNormal) * planeNormal;
+            testMeasurements[TestMeasurementType.KneeValgusLeft] =
+                Vector3D.AngleBetween(upperLegLeftProjected, -lowerLegLeftProjected);
+
+            Vector3D upperLegRightProjected = upperLegRight - Vector3D.DotProduct(upperLegRight, planeNormal) * planeNormal;
+            Vector3D lowerLegRightProjected = lowerLegRight - Vector3D.DotProduct(lowerLegRight, planeNormal) * planeNormal;
+            testMeasurements[TestMeasurementType.KneeValgusRight] =
+                Vector3D.AngleBetween(upperLegRightProjected, -lowerLegRightProjected);
             #endregion
         }
     }
