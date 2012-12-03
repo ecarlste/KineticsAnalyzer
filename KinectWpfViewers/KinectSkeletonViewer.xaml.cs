@@ -12,6 +12,8 @@ namespace KinectWpfViewers
     using System.Windows.Data;
     using Microsoft.Kinect;
 
+    using KinectSkeletonAnalyzer;
+
     public enum ImageType
     {
         /// <summary>

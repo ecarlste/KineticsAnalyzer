@@ -98,7 +98,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SkeletonAnalyzer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -142,6 +141,12 @@
     <Resource Include="Images\KinectTilt.png" />
     <Resource Include="Images\Slider.png" />
     <Resource Include="Images\SliderTrack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KinectSkeletonAnalyzer\KinectSkeletonAnalyzer.csproj">
+      <Project>{8b480fd7-7e41-4039-b264-23ffb88015f2}</Project>
+      <Name>KinectSkeletonAnalyzer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

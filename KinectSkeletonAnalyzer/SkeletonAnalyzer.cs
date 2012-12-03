@@ -1,15 +1,11 @@
-﻿using System;
-using System.Windows;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Microsoft.Kinect;
+using System.Collections.Generic;
 using System.Windows.Media.Media3D;
 
-namespace KinectWpfViewers
+namespace KinectSkeletonAnalyzer
 {
-    class SkeletonAnalyzer
+    public class SkeletonAnalyzer
     {
         Dictionary<TestMeasurementType,double> testMeasurements;
 
