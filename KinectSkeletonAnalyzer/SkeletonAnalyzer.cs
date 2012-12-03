@@ -14,6 +14,12 @@ namespace KinectSkeletonAnalyzer
             get { return testMeasurements; }
         }
 
+        private Dictionary<JointType, InjuryRiskType> jointRisks;
+        public Dictionary<JointType, InjuryRiskType> JointRisks
+        {
+            get { return jointRisks; }
+        }
+
         private Dictionary<SkeletonBoneType, Vector3D> bones;
 
         private Skeleton skeleton;
@@ -23,7 +29,6 @@ namespace KinectSkeletonAnalyzer
             set { skeleton = value; }
         }
         
-
         public SkeletonAnalyzer(Skeleton skeleton)
         {
             testMeasurements = new Dictionary<TestMeasurementType, double>();
@@ -39,6 +44,13 @@ namespace KinectSkeletonAnalyzer
             measureHipFlexion();
 
             measureKneeValgus();
+
+            determineInjuryRisk();
+        }
+
+        private void determineInjuryRisk()
+        {
+            throw new System.NotImplementedException();
         }
 
         private void measureKneeValgus()
