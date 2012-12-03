@@ -9,16 +9,6 @@ namespace KinectSkeletonAnalyzer
     {
         Dictionary<TestMeasurementType,double> testMeasurements;
 
-        public enum TestMeasurementType
-        {
-            KneeFlexionLeft,
-            KneeFlexionRight,
-            HipFlexionLeft,
-            HipFlexionRight,
-            KneeValgusLeft,
-            KneeValgusRight
-        };
-
         public SkeletonAnalyzer()
         {
             testMeasurements = new Dictionary<TestMeasurementType, double>();
