@@ -226,8 +226,8 @@ namespace KinectWpfViewers
 
             if (trackedSkeleton != null)
             {
-                SkeletonAnalyzer analyzer = new SkeletonAnalyzer();
-                analyzer.analyze(trackedSkeleton);
+                SkeletonAnalyzer analyzer = new SkeletonAnalyzer(trackedSkeleton);
+                analyzer.analyze();
             }
 
             if (haveSkeletonData)

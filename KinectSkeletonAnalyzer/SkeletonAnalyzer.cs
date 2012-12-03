@@ -2,89 +2,60 @@
 using Microsoft.Kinect;
 using System.Collections.Generic;
 using System.Windows.Media.Media3D;
+using System.ComponentModel;
 
 namespace KinectSkeletonAnalyzer
 {
     public class SkeletonAnalyzer
     {
-        Dictionary<TestMeasurementType,double> testMeasurements;
-
-        public SkeletonAnalyzer()
+        private Dictionary<TestMeasurementType, double> testMeasurements;
+        public Dictionary<TestMeasurementType, double> TestMeasurements
         {
-            testMeasurements = new Dictionary<TestMeasurementType, double>();
+            get { return testMeasurements; }
         }
 
-        public void analyze(Skeleton skeleton)
+        private Dictionary<SkeletonBoneType, Vector3D> bones;
+
+        private Skeleton skeleton;
+        public Skeleton Skeleton
         {
-            #region Joint Initialization
-            Joint spine = skeleton.Joints[JointType.Spine];
+            get { return skeleton; }
+            set { skeleton = value; }
+        }
+        
 
-            Joint hipCenter = skeleton.Joints[JointType.HipCenter];
-            Joint hipLeft = skeleton.Joints[JointType.HipLeft];
-            Joint hipRight = skeleton.Joints[JointType.HipRight];
+        public SkeletonAnalyzer(Skeleton skeleton)
+        {
+            testMeasurements = new Dictionary<TestMeasurementType, double>();
+            bones = new Dictionary<SkeletonBoneType, Vector3D>();
 
-            Joint ankleLeft = skeleton.Joints[JointType.AnkleLeft];
-            Joint ankleRight = skeleton.Joints[JointType.AnkleRight];
+            this.skeleton = skeleton;
+        }
 
-            Joint kneeLeft = skeleton.Joints[JointType.KneeLeft];
-            Joint kneeRight = skeleton.Joints[JointType.KneeRight];
-            #endregion
+        public void analyze()
+        {
+            measureKneeFlexion();
 
-            #region Measure Left Knee Flexion
-            Vector3D lowerLegLeft = new Vector3D(
-                    ankleLeft.Position.X - kneeLeft.Position.X,
-                    ankleLeft.Position.Y - kneeLeft.Position.Y,
-                    ankleLeft.Position.Z - kneeLeft.Position.Z
-                );
-            Vector3D upperLegLeft = new Vector3D(
-                    hipLeft.Position.X - kneeLeft.Position.X,
-                    hipLeft.Position.Y - kneeLeft.Position.Y,
-                    hipLeft.Position.Z - kneeLeft.Position.Z
-                );
+            measureHipFlexion();
 
-            lowerLegLeft.Normalize();
-            upperLegLeft.Normalize();
+            measureKneeValgus();
+        }
 
-            testMeasurements[TestMeasurementType.KneeFlexionLeft] = 180.0 - Vector3D.AngleBetween(lowerLegLeft, upperLegLeft);
-            #endregion
+        private void measureKneeValgus()
+        {
+            Vector3D lowerLegLeft = getBone(SkeletonBoneType.LowerLegLeft);
+            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
+            Vector3D lowerLegRight = getBone(SkeletonBoneType.LowerLegRight);
+            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
 
-            #region Measure Right Knee Flexion
-            Vector3D lowerLegRight = new Vector3D(
-                    ankleRight.Position.X - kneeRight.Position.X,
-                    ankleRight.Position.Y - kneeRight.Position.Y,
-                    ankleRight.Position.Z - kneeRight.Position.Z
-                );
-            Vector3D upperLegRight = new Vector3D(
-                    hipRight.Position.X - kneeRight.Position.X,
-                    hipRight.Position.Y - kneeRight.Position.Y,
-                    hipRight.Position.Z - kneeRight.Position.Z
-                );
+            SkeletonPoint hipLeft = skeleton.Joints[JointType.HipLeft].Position;
+            SkeletonPoint hipRight = skeleton.Joints[JointType.HipRight].Position;
 
-            lowerLegRight.Normalize();
-            upperLegRight.Normalize();
-
-            testMeasurements[TestMeasurementType.KneeFlexionRight] = 180.0 - Vector3D.AngleBetween(lowerLegRight, upperLegRight);
-            #endregion
-
-            #region Measure Hip Flexion
-            Vector3D backLower = new Vector3D(
-                    spine.Position.X - hipCenter.Position.X,
-                    spine.Position.Y - hipCenter.Position.Y,
-                    spine.Position.Z - hipCenter.Position.Z
-                );
-
-            backLower.Normalize();
-
-            testMeasurements[TestMeasurementType.HipFlexionLeft] = 180.0 - Vector3D.AngleBetween(backLower, upperLegLeft);
-            testMeasurements[TestMeasurementType.HipFlexionRight] = 180.0 - Vector3D.AngleBetween(backLower, upperLegRight);
-            #endregion
-
-            #region Measure Knee Valgus
             Vector3D hipAsis = new Vector3D(
-                    hipLeft.Position.X - hipRight.Position.X,
-                    hipLeft.Position.Y - hipRight.Position.Y,
-                    hipLeft.Position.Z - hipRight.Position.Z
-                );
+                   hipLeft.X - hipRight.X,
+                   hipLeft.Y - hipRight.Y,
+                   hipLeft.Z - hipRight.Z
+               );
 
             hipAsis.Normalize();
 
@@ -99,13 +70,76 @@ namespace KinectSkeletonAnalyzer
             Vector3D upperLegLeftProjected = upperLegLeft - Vector3D.DotProduct(upperLegLeft, planeNormal) * planeNormal;
             Vector3D lowerLegLeftProjected = lowerLegLeft - Vector3D.DotProduct(lowerLegLeft, planeNormal) * planeNormal;
             testMeasurements[TestMeasurementType.KneeValgusLeft] =
-                Vector3D.AngleBetween(upperLegLeftProjected, -lowerLegLeftProjected);
+                Vector3D.AngleBetween(upperLegLeftProjected, lowerLegLeftProjected);
 
             Vector3D upperLegRightProjected = upperLegRight - Vector3D.DotProduct(upperLegRight, planeNormal) * planeNormal;
             Vector3D lowerLegRightProjected = lowerLegRight - Vector3D.DotProduct(lowerLegRight, planeNormal) * planeNormal;
             testMeasurements[TestMeasurementType.KneeValgusRight] =
-                Vector3D.AngleBetween(upperLegRightProjected, -lowerLegRightProjected);
-            #endregion
+                Vector3D.AngleBetween(upperLegRightProjected, lowerLegRightProjected);
+        }
+
+        private void measureHipFlexion()
+        {
+            Vector3D backLower = getBone(SkeletonBoneType.BackLower);
+            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
+            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
+
+            testMeasurements[TestMeasurementType.HipFlexionLeft] = 180.0 - Vector3D.AngleBetween(backLower, upperLegLeft);
+            testMeasurements[TestMeasurementType.HipFlexionRight] = 180.0 - Vector3D.AngleBetween(backLower, upperLegRight);
+        }
+
+        private void measureKneeFlexion()
+        {
+            Vector3D lowerLegLeft = getBone(SkeletonBoneType.LowerLegLeft);
+            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
+            Vector3D lowerLegRight = getBone(SkeletonBoneType.LowerLegRight);
+            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
+
+            testMeasurements[TestMeasurementType.KneeFlexionLeft] = 180.0 - Vector3D.AngleBetween(lowerLegLeft, -upperLegLeft);
+            testMeasurements[TestMeasurementType.KneeFlexionRight] = 180.0 - Vector3D.AngleBetween(lowerLegRight, -upperLegRight);
+        }
+
+        private Vector3D getBone(SkeletonBoneType boneType)
+        {
+            if (!bones.ContainsKey(boneType))
+            {
+                SkeletonPoint p1;
+                SkeletonPoint p2;
+
+                switch (boneType)
+                {
+                    case SkeletonBoneType.LowerLegLeft:
+                        p1 = skeleton.Joints[JointType.KneeLeft].Position;
+                        p2 = skeleton.Joints[JointType.AnkleLeft].Position;
+                        break;
+                    case SkeletonBoneType.LowerLegRight:
+                        p1 = skeleton.Joints[JointType.KneeRight].Position;
+                        p2 = skeleton.Joints[JointType.AnkleRight].Position;
+                        break;
+                    case SkeletonBoneType.UpperLegLeft:
+                        p1 = skeleton.Joints[JointType.HipLeft].Position;
+                        p2 = skeleton.Joints[JointType.KneeLeft].Position;
+                        break;
+                    case SkeletonBoneType.UpperLegRight:
+                        p1 = skeleton.Joints[JointType.HipRight].Position;
+                        p2 = skeleton.Joints[JointType.KneeRight].Position;
+                        break;
+                    case SkeletonBoneType.BackLower:
+                        p1 = skeleton.Joints[JointType.HipCenter].Position;
+                        p2 = skeleton.Joints[JointType.Spine].Position;
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException();
+                }
+
+                Vector3D bone = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p2.Y);
+                bone.Normalize();
+                bones[boneType] = bone;
+                
+                return bone;
+            }
+
+            return bones[boneType];
         }
     }
 }

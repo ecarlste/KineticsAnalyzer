@@ -9,5 +9,5 @@ namespace KinectSkeletonAnalyzer
         HipFlexionRight,
         KneeValgusLeft,
         KneeValgusRight
-    };
+    }
 }
