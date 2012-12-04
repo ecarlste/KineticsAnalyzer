@@ -8,6 +8,16 @@ namespace KinectSkeletonAnalyzer
 {
     public class SkeletonAnalyzer
     {
+        private static readonly Dictionary<TestMeasurementType, JointType> measuredJoints = new Dictionary<TestMeasurementType, JointType>()
+        {
+            {TestMeasurementType.KneeFlexionLeft, JointType.KneeLeft},
+            {TestMeasurementType.KneeFlexionRight, JointType.KneeRight},
+            {TestMeasurementType.HipFlexionLeft, JointType.HipLeft},
+            {TestMeasurementType.HipFlexionRight, JointType.HipRight},
+            {TestMeasurementType.KneeValgusLeft, JointType.KneeLeft},
+            {TestMeasurementType.KneeValgusRight, JointType.KneeRight}
+        };
+
         private Dictionary<TestMeasurementType, double> testMeasurements;
         public Dictionary<TestMeasurementType, double> TestMeasurements
         {
@@ -32,6 +42,7 @@ namespace KinectSkeletonAnalyzer
         public SkeletonAnalyzer(Skeleton skeleton)
         {
             testMeasurements = new Dictionary<TestMeasurementType, double>();
+            jointRisks = new Dictionary<JointType, InjuryRiskType>();
             bones = new Dictionary<SkeletonBoneType, Vector3D>();
 
             this.skeleton = skeleton;
@@ -45,12 +56,72 @@ namespace KinectSkeletonAnalyzer
 
             measureKneeValgus();
 
-            determineInjuryRisk();
+            determineInjuryRisks();
         }
 
-        private void determineInjuryRisk()
+        private void determineInjuryRisks()
         {
-            throw new System.NotImplementedException();
+            foreach (TestMeasurementType testMeasurementType in testMeasurements.Keys)
+            {
+                InjuryRiskType riskType = determineInjuryRisk(testMeasurementType);
+                jointRisks[measuredJoints[testMeasurementType]] = riskType;
+            }
+        }
+
+        private InjuryRiskType determineInjuryRisk(TestMeasurementType testMeasurementType)
+        {
+            double testMeasurement = testMeasurements[testMeasurementType];
+
+            switch (testMeasurementType)
+            {
+                case TestMeasurementType.KneeFlexionLeft:
+                case TestMeasurementType.KneeFlexionRight:
+                    if (testMeasurement > 99)
+                    {
+                        return InjuryRiskType.High;
+                    }
+                    else if (testMeasurement > 97.67)
+                    {
+                        return InjuryRiskType.Moderate;
+                    }
+                    else if (testMeasurement > 96.33)
+                    {
+                        return InjuryRiskType.Low;
+                    }
+                    break;
+
+                case TestMeasurementType.HipFlexionLeft:
+                case TestMeasurementType.HipFlexionRight:
+                case TestMeasurementType.KneeValgusLeft:
+                case TestMeasurementType.KneeValgusRight:
+                    return InjuryRiskType.None;
+
+                default:
+                    throw new System.NotImplementedException();
+            }
+
+            return InjuryRiskType.None;
+        }
+
+        private void measureKneeFlexion()
+        {
+            Vector3D lowerLegLeft = getBone(SkeletonBoneType.LowerLegLeft);
+            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
+            Vector3D lowerLegRight = getBone(SkeletonBoneType.LowerLegRight);
+            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
+
+            testMeasurements[TestMeasurementType.KneeFlexionLeft] = 180.0 - Vector3D.AngleBetween(lowerLegLeft, -upperLegLeft);
+            testMeasurements[TestMeasurementType.KneeFlexionRight] = 180.0 - Vector3D.AngleBetween(lowerLegRight, -upperLegRight);
+        }
+
+        private void measureHipFlexion()
+        {
+            Vector3D backLower = getBone(SkeletonBoneType.BackLower);
+            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
+            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
+
+            testMeasurements[TestMeasurementType.HipFlexionLeft] = 180.0 - Vector3D.AngleBetween(backLower, upperLegLeft);
+            testMeasurements[TestMeasurementType.HipFlexionRight] = 180.0 - Vector3D.AngleBetween(backLower, upperLegRight);
         }
 
         private void measureKneeValgus()
@@ -90,27 +161,6 @@ namespace KinectSkeletonAnalyzer
                 Vector3D.AngleBetween(upperLegRightProjected, lowerLegRightProjected);
         }
 
-        private void measureHipFlexion()
-        {
-            Vector3D backLower = getBone(SkeletonBoneType.BackLower);
-            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
-            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
-
-            testMeasurements[TestMeasurementType.HipFlexionLeft] = 180.0 - Vector3D.AngleBetween(backLower, upperLegLeft);
-            testMeasurements[TestMeasurementType.HipFlexionRight] = 180.0 - Vector3D.AngleBetween(backLower, upperLegRight);
-        }
-
-        private void measureKneeFlexion()
-        {
-            Vector3D lowerLegLeft = getBone(SkeletonBoneType.LowerLegLeft);
-            Vector3D upperLegLeft = getBone(SkeletonBoneType.UpperLegLeft);
-            Vector3D lowerLegRight = getBone(SkeletonBoneType.LowerLegRight);
-            Vector3D upperLegRight = getBone(SkeletonBoneType.UpperLegRight);
-
-            testMeasurements[TestMeasurementType.KneeFlexionLeft] = 180.0 - Vector3D.AngleBetween(lowerLegLeft, -upperLegLeft);
-            testMeasurements[TestMeasurementType.KneeFlexionRight] = 180.0 - Vector3D.AngleBetween(lowerLegRight, -upperLegRight);
-        }
-
         private Vector3D getBone(SkeletonBoneType boneType)
         {
             if (!bones.ContainsKey(boneType))
@@ -144,7 +194,7 @@ namespace KinectSkeletonAnalyzer
                         throw new InvalidEnumArgumentException();
                 }
 
-                Vector3D bone = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p2.Y);
+                Vector3D bone = new Vector3D(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Y);
                 bone.Normalize();
                 bones[boneType] = bone;
                 
