@@ -4,7 +4,7 @@ using Microsoft.Kinect;
 
 namespace KinectSkeletonAnalyzer
 {
-    class JointColorizer
+    public class JointColorizer
     {
         private static readonly Dictionary<InjuryRiskType, Color> injuryRiskColors = new Dictionary<InjuryRiskType, Color>()
         {
@@ -16,7 +16,14 @@ namespace KinectSkeletonAnalyzer
 
         public static Dictionary<JointType, Color> getJointColors(Dictionary<JointType, InjuryRiskType> jointRisks)
         {
-            return null;
+            Dictionary<JointType, Color> jointColors = new Dictionary<JointType, Color>();
+
+            foreach (JointType jointType in jointRisks.Keys)
+            {
+                jointColors[jointType] = injuryRiskColors[jointRisks[jointType]];
+            }
+
+            return jointColors;
         }
     }
 }
