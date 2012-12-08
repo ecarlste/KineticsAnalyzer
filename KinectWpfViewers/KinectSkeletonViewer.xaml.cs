@@ -10,6 +10,7 @@ namespace KinectWpfViewers
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Data;
+    using System.Windows.Media;
     using Microsoft.Kinect;
 
     using KinectSkeletonAnalyzer;
@@ -228,6 +229,9 @@ namespace KinectWpfViewers
             {
                 SkeletonAnalyzer analyzer = new SkeletonAnalyzer(trackedSkeleton);
                 analyzer.analyze();
+
+                Dictionary<JointType, Color> jointColors;
+                jointColors = JointColorizer.getJointColors(analyzer.JointRisks);
             }
 
             if (haveSkeletonData)
