@@ -227,7 +227,7 @@ namespace KinectWpfViewers
 
             if (trackedSkeleton != null)
             {
-                SkeletonAnalyzer analyzer = new SkeletonAnalyzer(trackedSkeleton);
+                SkeletonMeasurer analyzer = new SkeletonMeasurer(trackedSkeleton);
                 analyzer.analyze();
 
                 Dictionary<JointType, Color> jointColors;

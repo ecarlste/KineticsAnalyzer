@@ -6,7 +6,7 @@ using System.ComponentModel;
 
 namespace KinectSkeletonAnalyzer
 {
-    public class SkeletonAnalyzer
+    public class SkeletonMeasurer
     {
         private static readonly Dictionary<TestMeasurementType, JointType> measuredJoints = new Dictionary<TestMeasurementType, JointType>()
         {
@@ -39,7 +39,7 @@ namespace KinectSkeletonAnalyzer
             set { skeleton = value; }
         }
         
-        public SkeletonAnalyzer(Skeleton skeleton)
+        public SkeletonMeasurer(Skeleton skeleton)
         {
             testMeasurements = new Dictionary<TestMeasurementType, double>();
             jointRisks = new Dictionary<JointType, InjuryRiskType>();
