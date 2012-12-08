@@ -229,9 +229,7 @@ namespace KinectWpfViewers
             {
                 SkeletonMeasurer analyzer = new SkeletonMeasurer(trackedSkeleton);
                 analyzer.analyze();
-
-                Dictionary<JointType, Color> jointColors;
-                jointColors = JointColorizer.getJointColors(analyzer.JointRisks);
+                AddMeasurementsToBuffer(analyzer.TestMeasurements);
             }
 
             if (haveSkeletonData)
@@ -348,6 +346,11 @@ namespace KinectWpfViewers
                     skeletonCanvas.ScaleFactor = scale;
                 }
             }
+        }
+
+        private void AddMeasurementsToBuffer(List<TestMeasurement> testMeasurements)
+        {
+            throw new NotImplementedException();
         }
 
         private void KinectSkeletonViewer_OnLoaded(object sender, RoutedEventArgs e)
