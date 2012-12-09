@@ -41,9 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InjuryRiskAnalyzer.cs" />
     <Compile Include="InjuryRiskType.cs" />
     <Compile Include="JointColorizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkeletonBone.cs" />
     <Compile Include="SkeletonMeasurer.cs" />
     <Compile Include="SkeletonBoneType.cs" />
     <Compile Include="TestMeasurement.cs" />

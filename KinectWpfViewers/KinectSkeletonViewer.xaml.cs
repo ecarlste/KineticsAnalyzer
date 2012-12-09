@@ -118,6 +118,8 @@ namespace KinectWpfViewers
         public void StopMeasuring()
         {
             isMeasuring = false;
+
+            InjuryRiskAnalyzer.Analyze(testMeasurementBuffer);
         }
 
         protected override void OnKinectSensorChanged(object sender, KinectSensorManagerEventArgs<KinectSensor> args)
