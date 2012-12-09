@@ -7,6 +7,7 @@ namespace KinectSkeletonAnalyzer
         LowerLegRight,
         UpperLegLeft,
         UpperLegRight,
-        BackLower
+        BackLower,
+        HipAsis
     }
 }
