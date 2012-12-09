@@ -8,10 +8,63 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/KinectWpfViewers;component/KinectControlResources.xaml"/>
+                <ResourceDictionary>
+                    <Storyboard Completed="StartAnalyzer" x:Key="Countdown">
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
+                            <DiscreteStringKeyFrame Value="5" KeyTime="0:0:0" />
+                        </StringAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:0.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:0.9" />
+
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
+                            <DiscreteStringKeyFrame Value="4" KeyTime="0:0:1" />
+                        </StringAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:1" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:1" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:1.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:1.9" />
+
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
+                            <DiscreteStringKeyFrame Value="3" KeyTime="0:0:2" />
+                        </StringAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:2" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:2" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:2.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:2.9" />
+
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
+                            <DiscreteStringKeyFrame Value="2" KeyTime="0:0:3" />
+                        </StringAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:3" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:3" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:3.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:3.9" />
+
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
+                            <DiscreteStringKeyFrame Value="1" KeyTime="0:0:4" />
+                        </StringAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:4" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:4" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:4.9" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:4.9" />
+
+                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
+                            <DiscreteStringKeyFrame Value="Go!" KeyTime="0:0:5" />
+                        </StringAnimationUsingKeyFrames>
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.5" BeginTime="0:0:5" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" BeginTime="0:0:5" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:5.5" />
+                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:5.5" />
+
+                    </Storyboard>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>
         
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -34,78 +87,19 @@
                         Visibility="{Binding DepthStreamEnabled,Converter={StaticResource BoolToVisibilityConverter}}"
                         Width="{Binding ElementName=DepthViewer,Path=ActualWidth}"
                         Height="{Binding ElementName=DepthViewer,Path=ActualHeight}"
-                        ShowBones="True" ShowJoints="True" ShowCenter="True" ImageType="Depth" />
+                        ShowBones="True" ShowJoints="True" ShowCenter="True" ImageType="Depth" x:Name="SkeletonViewer"/>
                 </Canvas>
                 <TextBlock x:Name="TestPromptTextBlock" Foreground="#FF708393" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
             </Viewbox>
+
+            <StackPanel Grid.Column="1" Button.Click="ButtonClickedEvent">
                 
-            <StackPanel Grid.Column="1">
-                <kt:KinectSettings KinectSensorManager="{Binding}" Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" Width="217"/>
+                <kt:KinectSettings KinectSensorManager="{Binding}" x:Name="KinectSettingsSidebar" Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" Width="217"/>
                 <Toolkit:KinectSensorChooserUI x:Name="SensorChooserUI" IsListening="True"
                                        HorizontalAlignment="Center" Margin="0,0,0,0"
                                        Height="44" Width="55"/>
-                <Button HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0" MouseLeftButtonUp="beginButton_MouseLeftButtonUp" Content="Begin Test">
-                    <Button.Triggers>
-                        <EventTrigger RoutedEvent="Button.Click">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard>
 
-                                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
-                                            <DiscreteStringKeyFrame Value="5" KeyTime="0:0:0" />
-                                        </StringAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:0.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:0.9" />
-
-                                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
-                                            <DiscreteStringKeyFrame Value="4" KeyTime="0:0:1" />
-                                        </StringAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:1" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:1" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:1.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:1.9" />
-
-                                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
-                                            <DiscreteStringKeyFrame Value="3" KeyTime="0:0:2" />
-                                        </StringAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:2" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:2" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:2.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:2.9" />
-
-                                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
-                                            <DiscreteStringKeyFrame Value="2" KeyTime="0:0:3" />
-                                        </StringAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:3" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:3" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:3.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:3.9" />
-
-                                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
-                                            <DiscreteStringKeyFrame Value="1" KeyTime="0:0:4" />
-                                        </StringAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:4" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:4" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:4.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:4.9" />
-
-                                        <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
-                                            <DiscreteStringKeyFrame Value="Go!" KeyTime="0:0:5" />
-                                        </StringAnimationUsingKeyFrames>
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="0" To="180" Duration="0:0:0.9" BeginTime="0:0:5" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.9" BeginTime="0:0:5" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:5.9" />
-                                        <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:5.9" />
-
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                    </Button.Triggers>
-                </Button>
 
             </StackPanel>
             </Grid>
