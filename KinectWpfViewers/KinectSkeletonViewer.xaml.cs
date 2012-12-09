@@ -10,7 +10,10 @@ namespace KinectWpfViewers
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Data;
+    using System.Windows.Media;
     using Microsoft.Kinect;
+
+    using KinectSkeletonAnalyzer;
 
     public enum ImageType
     {
@@ -63,6 +66,16 @@ namespace KinectWpfViewers
         private readonly List<Dictionary<JointType, JointMapping>> jointMappings = new List<Dictionary<JointType, JointMapping>>();
         private Skeleton[] skeletonData;
 
+        private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
+        private List<Skeleton> skeletonBuffer;
+        private List<long> frameTimeStampBuffer;
+
+        private bool isMeasuring;
+        public bool IsMeasuring
+        {
+            get { return isMeasuring; }
+        }
+
         public KinectSkeletonViewer()
         {
             InitializeComponent();
@@ -93,6 +106,25 @@ namespace KinectWpfViewers
         {
             get { return (ImageType)GetValue(ImageTypeProperty); }
             set { SetValue(ImageTypeProperty, value); }
+        }
+
+        public void StartMeasuring()
+        {
+            testMeasurementBuffer = new Dictionary<TestMeasurementType, List<double>>();
+            skeletonBuffer = new List<Skeleton>();
+            frameTimeStampBuffer = new List<long>();
+
+            isMeasuring = true;
+        }
+
+        public void StopMeasuring()
+        {
+            isMeasuring = false;
+
+            InjuryRiskAnalyzer riskAnalyzer = new InjuryRiskAnalyzer(testMeasurementBuffer);
+            riskAnalyzer.Analyze();
+
+            Dictionary<JointType, InjuryRiskType> injuryRisks = riskAnalyzer.InjuryRisks;
         }
 
         protected override void OnKinectSensorChanged(object sender, KinectSensorManagerEventArgs<KinectSensor> args)
@@ -196,6 +228,7 @@ namespace KinectWpfViewers
 
             bool haveSkeletonData = false;
             Skeleton trackedSkeleton = null;
+            long frameTimeStamp = -1;
 
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
             {
@@ -218,14 +251,20 @@ namespace KinectWpfViewers
                         }
                     }
 
+                    frameTimeStamp = skeletonFrame.Timestamp;
+
                     haveSkeletonData = true;
                 }
             }
 
-            if (trackedSkeleton != null)
+            if (isMeasuring && trackedSkeleton != null)
             {
-                SkeletonAnalyzer analyzer = new SkeletonAnalyzer();
-                analyzer.analyze(trackedSkeleton);
+                SkeletonMeasurer measurer = new SkeletonMeasurer(trackedSkeleton);
+                measurer.determineMeasurements();
+                AddMeasurementsToBuffer(measurer.TestMeasurements);
+
+                skeletonBuffer.Add(trackedSkeleton);
+                frameTimeStampBuffer.Add(frameTimeStamp);
             }
 
             if (haveSkeletonData)
@@ -341,6 +380,19 @@ namespace KinectWpfViewers
                     skeletonCanvas.Center = centerPoint;
                     skeletonCanvas.ScaleFactor = scale;
                 }
+            }
+        }
+
+        private void AddMeasurementsToBuffer(List<TestMeasurement> testMeasurements)
+        {
+            foreach (TestMeasurement testMeasurent in testMeasurements)
+            {
+                if (!testMeasurementBuffer.ContainsKey(testMeasurent.Type))
+                {
+                    testMeasurementBuffer[testMeasurent.Type] = new List<double>();
+                }
+
+                testMeasurementBuffer[testMeasurent.Type].Add(testMeasurent.Value);
             }
         }
 
