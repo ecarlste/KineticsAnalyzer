@@ -138,5 +138,14 @@ namespace KineticsAnalyzer
             this.KinectSensorManager.KinectSensor = null;
         }
 
+        /// <summary>
+        /// Event fired when the storyboard animation is complete
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StartAnalyzer(object sender, EventArgs e)
+        {
+        }
+
     }
 }

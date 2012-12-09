@@ -45,7 +45,7 @@
                     <!-- Begin the Storyboard -->
                     <EventTrigger RoutedEvent="Button.Click" SourceName="BeginButton">
                         <BeginStoryboard Name="MyBeginStoryboard">
-                            <Storyboard >
+                            <Storyboard Completed="StartAnalyzer">
                                 <StringAnimationUsingKeyFrames Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Text">
                                     <DiscreteStringKeyFrame Value="5" KeyTime="0:0:0" />
                                 </StringAnimationUsingKeyFrames>
