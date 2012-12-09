@@ -156,5 +156,8 @@ namespace KinectWpfViewers
             settings.PowerLineFrequency = powerLineFrequency;
             settings.BacklightCompensationMode = backlightCompensationMode;
         }
+        
+        
+
     }
 }

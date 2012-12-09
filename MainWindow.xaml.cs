@@ -4,11 +4,13 @@ using System.IO;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using KinectWpfViewers;
+using System.Windows.Controls;
 
 namespace KineticsAnalyzer
 {
@@ -40,6 +42,7 @@ namespace KineticsAnalyzer
             this.KinectSensorManager = new KinectSensorManager();
             //Subscribe to the KinectSensorChanged Event
             this.KinectSensorManager.KinectSensorChanged += this.KinectSensorChanged;
+            
             this.DataContext = this.KinectSensorManager;
 
             this.SensorChooserUI.KinectSensorChooser = sensorChooser;
@@ -137,9 +140,57 @@ namespace KineticsAnalyzer
             this.KinectSensorManager.KinectSensor = null;
         }
 
-        private void beginButton_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        /// <summary>
+        /// Event fired when the storyboard animation is complete
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void StartAnalyzer(object sender, EventArgs e)
         {
+            SkeletonViewer.StartMeasuring();
+        }
 
+        /// <summary>
+        /// Deal with Button Clicked Events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonClickedEvent(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement feSource = e.OriginalSource as FrameworkElement;
+            switch (feSource.Name)
+            {
+                case "BeginButton":
+                    Button beginButton = feSource as Button;
+                    Storyboard countdown = this.FindResource("Countdown") as Storyboard;
+
+                    // Start the animation and change the button content
+                    if ( beginButton.Content.Equals("Begin Test") )
+                    {
+                        countdown.Begin();
+                        beginButton.Content = "End Test";
+                    }
+                    else
+                    {
+                        // If the animation is running stop the storyboard
+                        // otherwise the animation is done so stop measuring needs to be called.
+                        if (countdown.GetCurrentState().Equals(ClockState.Active))
+                        {
+                            countdown.Stop();
+                        }
+                        else
+                        {
+                            SkeletonViewer.StopMeasuring();
+                        }
+                        
+                        // Change button content
+                        beginButton.Content = "Begin Test";
+                    }
+                    // set event to handled    
+                    e.Handled = true;
+                    break;
+                
+            }
         }
     }
 }
