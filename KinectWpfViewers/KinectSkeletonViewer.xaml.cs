@@ -66,6 +66,15 @@ namespace KinectWpfViewers
         private readonly List<Dictionary<JointType, JointMapping>> jointMappings = new List<Dictionary<JointType, JointMapping>>();
         private Skeleton[] skeletonData;
 
+        private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
+        private List<Skeleton> skeletonBuffer;
+
+        private bool isMeasuring;
+        public bool IsMeasuring
+        {
+            get { return isMeasuring; }
+        }
+
         public KinectSkeletonViewer()
         {
             InitializeComponent();
@@ -96,6 +105,19 @@ namespace KinectWpfViewers
         {
             get { return (ImageType)GetValue(ImageTypeProperty); }
             set { SetValue(ImageTypeProperty, value); }
+        }
+
+        public void StartMeasuring()
+        {
+            testMeasurementBuffer = new Dictionary<TestMeasurementType, List<double>>();
+            skeletonBuffer = new List<Skeleton>();
+
+            isMeasuring = true;
+        }
+
+        public void StopMeasuring()
+        {
+            isMeasuring = false;
         }
 
         protected override void OnKinectSensorChanged(object sender, KinectSensorManagerEventArgs<KinectSensor> args)
@@ -225,13 +247,13 @@ namespace KinectWpfViewers
                 }
             }
 
-            if (trackedSkeleton != null)
+            if (isMeasuring && trackedSkeleton != null)
             {
-                SkeletonAnalyzer analyzer = new SkeletonAnalyzer(trackedSkeleton);
-                analyzer.analyze();
+                SkeletonMeasurer measurer = new SkeletonMeasurer(trackedSkeleton);
+                measurer.determineMeasurements();
+                AddMeasurementsToBuffer(measurer.TestMeasurements);
 
-                Dictionary<JointType, Color> jointColors;
-                jointColors = JointColorizer.getJointColors(analyzer.JointRisks);
+                skeletonBuffer.Add(trackedSkeleton);
             }
 
             if (haveSkeletonData)
@@ -347,6 +369,19 @@ namespace KinectWpfViewers
                     skeletonCanvas.Center = centerPoint;
                     skeletonCanvas.ScaleFactor = scale;
                 }
+            }
+        }
+
+        private void AddMeasurementsToBuffer(List<TestMeasurement> testMeasurements)
+        {
+            foreach (TestMeasurement testMeasurent in testMeasurements)
+            {
+                if (!testMeasurementBuffer.ContainsKey(testMeasurent.Type))
+                {
+                    testMeasurementBuffer[testMeasurent.Type] = new List<double>();
+                }
+
+                testMeasurementBuffer[testMeasurent.Type].Add(testMeasurent.Value);
             }
         }
 
