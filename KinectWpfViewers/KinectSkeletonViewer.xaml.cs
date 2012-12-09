@@ -112,6 +112,7 @@ namespace KinectWpfViewers
         {
             testMeasurementBuffer = new Dictionary<TestMeasurementType, List<double>>();
             skeletonBuffer = new List<Skeleton>();
+            frameTimeStampBuffer = new List<long>();
 
             isMeasuring = true;
         }
