@@ -68,6 +68,7 @@ namespace KinectWpfViewers
 
         private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
         private List<Skeleton> skeletonBuffer;
+        private List<long> frameTimeStampBuffer;
 
         private bool isMeasuring;
         public bool IsMeasuring
@@ -119,7 +120,10 @@ namespace KinectWpfViewers
         {
             isMeasuring = false;
 
-            InjuryRiskAnalyzer.Analyze(testMeasurementBuffer);
+            InjuryRiskAnalyzer riskAnalyzer = new InjuryRiskAnalyzer(testMeasurementBuffer);
+            riskAnalyzer.Analyze();
+
+            Dictionary<JointType, InjuryRiskType> injuryRisks = riskAnalyzer.InjuryRisks;
         }
 
         protected override void OnKinectSensorChanged(object sender, KinectSensorManagerEventArgs<KinectSensor> args)
@@ -223,6 +227,7 @@ namespace KinectWpfViewers
 
             bool haveSkeletonData = false;
             Skeleton trackedSkeleton = null;
+            long frameTimeStamp = -1;
 
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
             {
@@ -245,6 +250,8 @@ namespace KinectWpfViewers
                         }
                     }
 
+                    frameTimeStamp = skeletonFrame.Timestamp;
+
                     haveSkeletonData = true;
                 }
             }
@@ -256,6 +263,7 @@ namespace KinectWpfViewers
                 AddMeasurementsToBuffer(measurer.TestMeasurements);
 
                 skeletonBuffer.Add(trackedSkeleton);
+                frameTimeStampBuffer.Add(frameTimeStamp);
             }
 
             if (haveSkeletonData)
