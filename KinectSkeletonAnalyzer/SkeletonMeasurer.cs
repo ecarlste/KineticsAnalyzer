@@ -9,16 +9,6 @@ namespace KinectSkeletonAnalyzer
 {
     public class SkeletonMeasurer
     {
-        private static readonly Dictionary<TestMeasurementType, JointType> measuredJoints = new Dictionary<TestMeasurementType, JointType>()
-        {
-            {TestMeasurementType.KneeFlexionLeft, JointType.KneeLeft},
-            {TestMeasurementType.KneeFlexionRight, JointType.KneeRight},
-            {TestMeasurementType.HipFlexionLeft, JointType.HipLeft},
-            {TestMeasurementType.HipFlexionRight, JointType.HipRight},
-            {TestMeasurementType.KneeValgusLeft, JointType.KneeLeft},
-            {TestMeasurementType.KneeValgusRight, JointType.KneeRight}
-        };
-
         private List<TestMeasurement> testMeasurements;
         public List<TestMeasurement> TestMeasurements
         {
@@ -42,7 +32,7 @@ namespace KinectSkeletonAnalyzer
             this.skeleton = skeleton;
         }
 
-        public void analyze()
+        public void determineMeasurements()
         {
             measureKneeFlexion();
 
