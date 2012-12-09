@@ -150,6 +150,11 @@ namespace KineticsAnalyzer
             SkeletonViewer.StartMeasuring();
         }
 
+        /// <summary>
+        /// Deal with Button Clicked Events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ButtonClickedEvent(object sender, RoutedEventArgs e)
         {
             FrameworkElement feSource = e.OriginalSource as FrameworkElement;
@@ -157,19 +162,31 @@ namespace KineticsAnalyzer
             {
                 case "BeginButton":
                     Button beginButton = feSource as Button;
+                    Storyboard countdown = this.FindResource("Countdown") as Storyboard;
 
+                    // Start the animation and change the button content
                     if ( beginButton.Content.Equals("Begin Test") )
                     {
-                        Storyboard countdown = this.FindResource("Countdown") as Storyboard;
                         countdown.Begin();
-
                         beginButton.Content = "End Test";
-                        // make button not change size
                     }
                     else
                     {
-                        SkeletonViewer.StopMeasuring();
-                    }                        
+                        // If the animation is running stop the storyboard
+                        // otherwise the animation is done so stop measuring needs to be called.
+                        if (countdown.GetCurrentState().Equals(ClockState.Active))
+                        {
+                            countdown.Stop();
+                        }
+                        else
+                        {
+                            SkeletonViewer.StopMeasuring();
+                        }
+                        
+                        // Change button content
+                        beginButton.Content = "Begin Test";
+                    }
+                    // set event to handled    
                     e.Handled = true;
                     break;
                 
