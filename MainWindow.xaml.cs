@@ -4,11 +4,13 @@ using System.IO;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
 using KinectWpfViewers;
+using System.Windows.Controls;
 
 namespace KineticsAnalyzer
 {
@@ -145,7 +147,33 @@ namespace KineticsAnalyzer
         /// <param name="e"></param>
         private void StartAnalyzer(object sender, EventArgs e)
         {
+            SkeletonViewer.StartMeasuring();
         }
 
+        private void ButtonClickedEvent(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement feSource = e.OriginalSource as FrameworkElement;
+            switch (feSource.Name)
+            {
+                case "BeginButton":
+                    Button beginButton = feSource as Button;
+
+                    if ( beginButton.Content.Equals("Begin Test") )
+                    {
+                        Storyboard countdown = this.FindResource("Countdown") as Storyboard;
+                        countdown.Begin();
+
+                        beginButton.Content = "End Test";
+                        // make button not change size
+                    }
+                    else
+                    {
+                        SkeletonViewer.StopMeasuring();
+                    }                        
+                    e.Handled = true;
+                    break;
+                
+            }
+        }
     }
 }
