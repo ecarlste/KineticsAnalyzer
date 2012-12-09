@@ -271,7 +271,7 @@
 
         <RadioButton Tag="_Testing"  Style="{StaticResource KinectSettingsPanel}" Margin="0 0 0 10">
             <StackPanel Orientation="Vertical">
-                <Button HorizontalAlignment="Right" x:Name="BeginButton" VerticalAlignment="Center" Margin="0,0,20,0" Content="Begin Test">
+                <Button Style="{StaticResource KinectButton}" x:Name="BeginButton" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="35,20,0,20" Width="130" Height="50" Content="Begin Test">
 
                 <Button.Triggers>
                         <EventTrigger RoutedEvent="Button.Click">
