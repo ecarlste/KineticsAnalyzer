@@ -40,6 +40,7 @@ namespace KineticsAnalyzer
             this.KinectSensorManager = new KinectSensorManager();
             //Subscribe to the KinectSensorChanged Event
             this.KinectSensorManager.KinectSensorChanged += this.KinectSensorChanged;
+            
             this.DataContext = this.KinectSensorManager;
 
             this.SensorChooserUI.KinectSensorChooser = sensorChooser;
@@ -137,9 +138,5 @@ namespace KineticsAnalyzer
             this.KinectSensorManager.KinectSensor = null;
         }
 
-        private void beginButton_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
-        }
     }
 }
