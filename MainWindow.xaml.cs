@@ -1,11 +1,8 @@
 ﻿
 using System;
-using System.IO;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
@@ -52,6 +49,12 @@ namespace KineticsAnalyzer
             var kinectSensorBinding = new Binding("Kinect") { Source = this.sensorChooser };
             BindingOperations.SetBinding(this.KinectSensorManager, KinectSensorManager.KinectSensorProperty, kinectSensorBinding);
 
+            // TODO: Remove commented binding after you understand it.
+            //Binding statusBarBinding = new Binding("ProgressValue");
+            //statusBarBinding.Source = this.SkeletonViewer.RiskAnalyzer;
+            //statusBarText.SetBinding(TextBlock.TextProperty, statusBarBinding);
+
+            this.statusBar.DataContext = this.SkeletonViewer.RiskAnalyzer;
         }
 
         /// <summary>
@@ -94,11 +97,7 @@ namespace KineticsAnalyzer
             kinectSensorManager.SkeletonStreamEnabled = true;
             kinectSensorManager.DepthStreamEnabled = true;
             
-            
             kinectSensorManager.DepthFormat = DepthImageFormat.Resolution640x480Fps30;
-
-            // Set statusbar to ready
-            statusBarText.Text = Properties.Resources.KinectReady;
         }
 
         /// <summary>
@@ -108,7 +107,6 @@ namespace KineticsAnalyzer
         private void UninitializeKinectServices(KinectSensor sensor)
         {
             //sensor.DepthFrameReady -= KinectSensorDepthFrameReady;
-            statusBarText.Text = Properties.Resources.NoKinectReady;
         }
 
         /// <summary>

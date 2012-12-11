@@ -10,7 +10,6 @@ namespace KinectWpfViewers
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Data;
-    using System.Windows.Media;
     using Microsoft.Kinect;
 
     using KinectSkeletonAnalyzer;
@@ -76,12 +75,19 @@ namespace KinectWpfViewers
             get { return isMeasuring; }
         }
 
+        private InjuryRiskAnalyzer riskAnalyzer;
+        public InjuryRiskAnalyzer RiskAnalyzer
+        {
+            get { return riskAnalyzer; }
+        }
+
         public KinectSkeletonViewer()
         {
             InitializeComponent();
             this.ShowJoints = true;
             this.ShowBones = true;
             this.ShowCenter = true;
+            this.riskAnalyzer = new InjuryRiskAnalyzer();
         }
 
         public bool ShowBones
@@ -121,7 +127,7 @@ namespace KinectWpfViewers
         {
             isMeasuring = false;
 
-            InjuryRiskAnalyzer riskAnalyzer = new InjuryRiskAnalyzer(testMeasurementBuffer);
+            riskAnalyzer.TestMeasurementBuffer = testMeasurementBuffer;
             riskAnalyzer.Analyze();
 
             Dictionary<JointType, InjuryRiskType> injuryRisks = riskAnalyzer.InjuryRisks;

@@ -122,9 +122,9 @@
         </Viewbox>
         -->
         
-        <StatusBar Grid.Row="1">
+        <StatusBar Grid.Row="1" x:Name="statusBar">
             <StatusBarItem>
-                <TextBlock x:Name="statusBarText" />
+                <TextBlock Text="{Binding Path=ProgressValue}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>
