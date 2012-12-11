@@ -68,8 +68,7 @@ namespace KinectSkeletonAnalyzer
 
             injuryRisk = InjuryRiskType.None;
 
-            JointType jointAtRisk = riskJoints[type];
-            injuryRisks[jointAtRisk] = injuryRisk;
+            AddInjuryRisk(type, injuryRisk);
         }
 
         private void DetermineRiskFromKneeFlexion(TestMeasurementType type)
@@ -90,8 +89,7 @@ namespace KinectSkeletonAnalyzer
                 injuryRisk = InjuryRiskType.Moderate;
             }
 
-            JointType jointAtRisk = riskJoints[type];
-            injuryRisks[jointAtRisk] = injuryRisk;
+            AddInjuryRisk(type, injuryRisk);
         }
 
         private void DetermineRiskFromHipFlexion(TestMeasurementType type)
@@ -112,7 +110,21 @@ namespace KinectSkeletonAnalyzer
                 injuryRisk = InjuryRiskType.Moderate;
             }
 
+            AddInjuryRisk(type, injuryRisk);
+        }
+
+        private void AddInjuryRisk(TestMeasurementType type, InjuryRiskType injuryRisk)
+        {
             JointType jointAtRisk = riskJoints[type];
+
+            // first check to see if the key "type" exists, if it does then we need to check to see if the new
+            // injury risk level is higher than the current one. If it's not, then we don't need to do anything at all.
+            if (injuryRisks.ContainsKey(jointAtRisk) && injuryRisks[jointAtRisk] >= injuryRisk)
+            {
+                return;
+            }
+
+            // otherwise we need to update or create the injuryRisk entry in the dictionary
             injuryRisks[jointAtRisk] = injuryRisk;
         }
     }
