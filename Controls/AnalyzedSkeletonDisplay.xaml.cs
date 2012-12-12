@@ -47,6 +47,7 @@ namespace KineticsAnalyzer.Controls
         {
             AnalyzedKinectSkeleton analyzedSkeleton = new AnalyzedKinectSkeleton();
             analyzedSkeleton.JointMapping = this.JointMapping;
+            analyzedSkeleton.InjuryRisks = this.riskAnalyzer.InjuryRisks;
             this.AnalyzedSkeletonCanvasPanel.Children.Add(analyzedSkeleton);
         }
     }
