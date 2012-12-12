@@ -90,7 +90,7 @@
                         
                     <Controls:AnalyzedSkeletonDisplay
                         x:Name="AnalysisResultsDisplay"
-                        Background="CadetBlue"
+                        Background="Black"
                         Width="{Binding ElementName=DepthViewer, Path=ActualWidth}"
                         Height="{Binding ElementName=DepthViewer, Path=ActualHeight}"
                         Visibility="Hidden"

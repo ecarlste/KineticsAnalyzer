@@ -192,7 +192,6 @@ namespace KineticsAnalyzer
 
                             // hide the depthviewer/skeletonviewer and show the analysis results display
                             this.AnalysisResultsDisplay.Visibility = Visibility.Visible;
-                            this.DepthViewer.Visibility = Visibility.Hidden;
                         }
                         
                         // Change button content

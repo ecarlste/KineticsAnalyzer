@@ -50,5 +50,19 @@ namespace KineticsAnalyzer.Controls
             analyzedSkeleton.InjuryRisks = this.riskAnalyzer.InjuryRisks;
             this.AnalyzedSkeletonCanvasPanel.Children.Add(analyzedSkeleton);
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Visibility = Visibility.Hidden;
+
+            AnalyzedKinectSkeleton analyzedSkeleton = AnalyzedSkeletonCanvasPanel.Children.OfType<AnalyzedKinectSkeleton>().FirstOrDefault();
+
+            if (analyzedSkeleton != null)
+            {
+                this.AnalyzedSkeletonCanvasPanel.Children.Remove(analyzedSkeleton);
+            }
+    
+            e.Handled = true;
+        }
     }
 }
