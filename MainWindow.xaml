@@ -124,7 +124,9 @@
         
         <StatusBar Grid.Row="1" x:Name="statusBar">
             <StatusBarItem>
-                <TextBlock Text="{Binding Path=ProgressValue}"/>
+                <ProgressBar Width="200" Height="18" Name="ProgressBarTest" 
+                 Value="{Binding Path=ProgressValue}" 
+                 Minimum="0" Maximum="1"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>
