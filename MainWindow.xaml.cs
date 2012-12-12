@@ -49,11 +49,6 @@ namespace KineticsAnalyzer
             var kinectSensorBinding = new Binding("Kinect") { Source = this.sensorChooser };
             BindingOperations.SetBinding(this.KinectSensorManager, KinectSensorManager.KinectSensorProperty, kinectSensorBinding);
 
-            // TODO: Remove commented binding after you understand it.
-            //Binding statusBarBinding = new Binding("ProgressValue");
-            //statusBarBinding.Source = this.SkeletonViewer.RiskAnalyzer;
-            //statusBarText.SetBinding(TextBlock.TextProperty, statusBarBinding);
-
             this.statusBar.DataContext = this.SkeletonViewer.RiskAnalyzer;
         }
 
