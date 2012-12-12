@@ -54,6 +54,14 @@ namespace KineticsAnalyzer.Controls
             this.DrawBone(drawingContext, JointType.HipRight, JointType.KneeRight);
             this.DrawBone(drawingContext, JointType.KneeRight, JointType.AnkleRight);
             this.DrawBone(drawingContext, JointType.AnkleRight, JointType.FootRight);
+
+            // Render Joints
+            foreach (JointMapping joint in this.JointMapping.Values)
+            {
+                Brush drawBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+
+                drawingContext.DrawEllipse(drawBrush, null, joint.MappedPoint, 3, 3);
+            }
         }
 
         private void DrawBone(DrawingContext drawingContext, JointType jointType1, JointType jointType2)
