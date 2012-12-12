@@ -91,40 +91,21 @@
                 </Canvas>
                 <TextBlock x:Name="TestPromptTextBlock" Foreground="#FF708393" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
-            </Viewbox>
+        </Viewbox>
 
             <StackPanel Grid.Column="1" Button.Click="ButtonClickedEvent">
-                
                 <kt:KinectSettings KinectSensorManager="{Binding}" x:Name="KinectSettingsSidebar" Margin="0,0,0,0" VerticalAlignment="Top" Height="Auto" Width="217"/>
                 <Toolkit:KinectSensorChooserUI x:Name="SensorChooserUI" IsListening="True"
-                                       HorizontalAlignment="Center" Margin="0,0,0,0"
-                                       Height="44" Width="55"/>
-
-
+                                        HorizontalAlignment="Center" Margin="0,0,0,0"
+                                        Height="44" Width="55"/>
             </StackPanel>
-            </Grid>
-        
-        <!--
-                <Viewbox Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform">
-            <Grid>
-                <kt:KinectDepthViewer x:Name="DepthViewer" CollectFrameRate="True" RetainImageOnSensorChange="True"
-                                      KinectSensorManager="{Binding}" />
-                <Canvas>
-                    <kt:KinectSkeletonViewer 
-                        KinectSensorManager="{Binding}"
-                        Visibility="{Binding DepthStreamEnabled,Converter={StaticResource BoolToVisibilityConverter}}"
-                        Width="{Binding ElementName=DepthViewer,Path=ActualWidth}"
-                        Height="{Binding ElementName=DepthViewer,Path=ActualHeight}"
-                        ShowBones="True" ShowJoints="True" ShowCenter="True" ImageType="Depth" />
-                </Canvas>
-                    <TextBlock x:Name="TestPromptTextBlock" Foreground="#FF708393" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            </Grid>
-        </Viewbox>
-        -->
+        </Grid>
         
         <StatusBar Grid.Row="1" x:Name="statusBar">
             <StatusBarItem>
-                <TextBlock Text="{Binding Path=ProgressValue}"/>
+                <ProgressBar Width="200" Height="18" Name="ProgressBarTest" 
+                 Value="{Binding Path=ProgressValue}" 
+                 Minimum="0" Maximum="1"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>
