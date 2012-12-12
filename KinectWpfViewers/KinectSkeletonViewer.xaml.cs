@@ -70,6 +70,7 @@ namespace KinectWpfViewers
         private List<long> frameTimeStampBuffer;
         private bool isMeasuring;
         private InjuryRiskAnalyzer riskAnalyzer;
+        private Dictionary<JointType, JointMapping> fullyTrackedMapping;
         
         public KinectSkeletonViewer()
         {
@@ -119,8 +120,15 @@ namespace KinectWpfViewers
             get { return skeletonBuffer; }
         }
 
+        public Dictionary<JointType, JointMapping> FullyTrackedMapping
+        {
+            get { return fullyTrackedMapping; }
+        }
+
         public void StartMeasuring()
         {
+            fullyTrackedMapping = null;
+
             testMeasurementBuffer = new Dictionary<TestMeasurementType, List<double>>();
             skeletonBuffer = new List<Skeleton>();
             frameTimeStampBuffer = new List<long>();
@@ -268,8 +276,16 @@ namespace KinectWpfViewers
                 }
             }
 
+
+            bool isFullyTracked = false;
             if (isMeasuring && trackedIndex > -1)
             {
+                // check to see if the skeleton @ trackedIndex is fully tracked
+                if (fullyTrackedMapping == null && IsFullyTracked(skeletonData[trackedIndex]))
+                {
+                    isFullyTracked = true;
+                }
+
                 SkeletonMeasurer measurer = new SkeletonMeasurer(skeletonData[trackedIndex]);
                 measurer.determineMeasurements();
                 AddMeasurementsToBuffer(measurer.TestMeasurements);
@@ -391,7 +407,32 @@ namespace KinectWpfViewers
                     skeletonCanvas.Center = centerPoint;
                     skeletonCanvas.ScaleFactor = scale;
                 }
+
+                if (isFullyTracked)
+                {
+                    fullyTrackedMapping = new Dictionary<JointType, JointMapping>();
+
+                    foreach (JointType type in jointMappings[trackedIndex].Keys)
+                    {
+                        fullyTrackedMapping[type] = new JointMapping();
+                        fullyTrackedMapping[type].Joint = jointMappings[trackedIndex][type].Joint;
+                        fullyTrackedMapping[type].MappedPoint = jointMappings[trackedIndex][type].MappedPoint;
+                    }
+                }
             }
+        }
+
+        private bool IsFullyTracked(Skeleton skeleton)
+        {
+            foreach (Joint joint in skeleton.Joints)
+            {
+                if (!joint.TrackingState.Equals(JointTrackingState.Tracked))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void AddMeasurementsToBuffer(List<TestMeasurement> testMeasurements)

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KinectSkeletonAnalyzer;
 using Microsoft.Kinect;
+using KinectWpfViewers;
 
 namespace KineticsAnalyzer.Controls
 {
@@ -23,13 +24,11 @@ namespace KineticsAnalyzer.Controls
     public partial class AnalyzedSkeletonDisplay : UserControl
     {
         private InjuryRiskAnalyzer riskAnalyzer;
-        private Skeleton skeleton;
+        private Dictionary<JointType, JointMapping> jointMapping;
 
         public AnalyzedSkeletonDisplay()
         {
             InitializeComponent();
-
-            this.AnalyzedSkeletonCanvasPanel.Children.Add(new AnalyzedKinectSkeleton());
         }
 
         public InjuryRiskAnalyzer RiskAnalyzer
@@ -38,31 +37,17 @@ namespace KineticsAnalyzer.Controls
             set { riskAnalyzer = value; }
         }
 
-        internal void DetermineSkeletonFrameUsed(List<Skeleton> skeletons)
+        public Dictionary<JointType, JointMapping> JointMapping
         {
-            this.skeleton = null;
-
-            foreach (Skeleton skeleton in skeletons)
-            {
-                if (IsCompletelyTracked(skeleton))
-                {
-                    this.skeleton = skeleton;
-                    break;
-                }
-            }
+            get { return jointMapping; }
+            set { jointMapping = value; }
         }
 
-        private bool IsCompletelyTracked(Skeleton skeleton)
+        internal void AddAnalyzedKinectSkeleton()
         {
-            foreach (Joint joint in skeleton.Joints)
-            {
-                if (!joint.TrackingState.Equals(JointTrackingState.Tracked))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            AnalyzedKinectSkeleton analyzedSkeleton = new AnalyzedKinectSkeleton();
+            analyzedSkeleton.JointMapping = this.JointMapping;
+            this.AnalyzedSkeletonCanvasPanel.Children.Add(analyzedSkeleton);
         }
     }
 }
