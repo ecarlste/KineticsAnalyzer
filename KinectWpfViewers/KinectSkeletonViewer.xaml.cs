@@ -10,7 +10,6 @@ namespace KinectWpfViewers
     using System.Collections.Generic;
     using System.Windows;
     using System.Windows.Data;
-    using System.Windows.Media;
     using Microsoft.Kinect;
 
     using KinectSkeletonAnalyzer;
@@ -69,19 +68,17 @@ namespace KinectWpfViewers
         private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
         private List<Skeleton> skeletonBuffer;
         private List<long> frameTimeStampBuffer;
-
         private bool isMeasuring;
-        public bool IsMeasuring
-        {
-            get { return isMeasuring; }
-        }
-
+        private InjuryRiskAnalyzer riskAnalyzer;
+        private Dictionary<JointType, JointMapping> fullyTrackedMapping;
+        
         public KinectSkeletonViewer()
         {
             InitializeComponent();
             this.ShowJoints = true;
             this.ShowBones = true;
             this.ShowCenter = true;
+            this.riskAnalyzer = new InjuryRiskAnalyzer();
         }
 
         public bool ShowBones
@@ -108,8 +105,30 @@ namespace KinectWpfViewers
             set { SetValue(ImageTypeProperty, value); }
         }
 
+        public bool IsMeasuring
+        {
+            get { return isMeasuring; }
+        }
+
+        public InjuryRiskAnalyzer RiskAnalyzer
+        {
+            get { return riskAnalyzer; }
+        }
+
+        public List<Skeleton> SkeletonBuffer
+        {
+            get { return skeletonBuffer; }
+        }
+
+        public Dictionary<JointType, JointMapping> FullyTrackedMapping
+        {
+            get { return fullyTrackedMapping; }
+        }
+
         public void StartMeasuring()
         {
+            fullyTrackedMapping = null;
+
             testMeasurementBuffer = new Dictionary<TestMeasurementType, List<double>>();
             skeletonBuffer = new List<Skeleton>();
             frameTimeStampBuffer = new List<long>();
@@ -121,7 +140,7 @@ namespace KinectWpfViewers
         {
             isMeasuring = false;
 
-            InjuryRiskAnalyzer riskAnalyzer = new InjuryRiskAnalyzer(testMeasurementBuffer);
+            riskAnalyzer.TestMeasurementBuffer = testMeasurementBuffer;
             riskAnalyzer.Analyze();
 
             Dictionary<JointType, InjuryRiskType> injuryRisks = riskAnalyzer.InjuryRisks;
@@ -227,7 +246,6 @@ namespace KinectWpfViewers
             }
 
             bool haveSkeletonData = false;
-            Skeleton trackedSkeleton = null;
             long frameTimeStamp = -1;
 
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
@@ -241,29 +259,38 @@ namespace KinectWpfViewers
 
                     skeletonFrame.CopySkeletonDataTo(this.skeletonData);
 
-                    // find the first tracked skeleton and set var trackedSkeleton accordingly
-                    foreach (Skeleton skeleton in skeletonData)
-                    {
-                        if (skeleton.TrackingState.Equals(SkeletonTrackingState.Tracked))
-                        {
-                            trackedSkeleton = skeleton;
-                            break;
-                        }
-                    }
-
                     frameTimeStamp = skeletonFrame.Timestamp;
 
                     haveSkeletonData = true;
                 }
             }
 
-            if (isMeasuring && trackedSkeleton != null)
+            int trackedIndex = -1;
+            // find the first tracked skeleton and set var trackedSkeleton accordingly
+            for (int i = 0; i < skeletonData.Length; i++)
             {
-                SkeletonMeasurer measurer = new SkeletonMeasurer(trackedSkeleton);
+                if (skeletonData[i].TrackingState.Equals(SkeletonTrackingState.Tracked))
+                {
+                    trackedIndex = i;
+                    break;
+                }
+            }
+
+
+            bool isFullyTracked = false;
+            if (isMeasuring && trackedIndex > -1)
+            {
+                // check to see if the skeleton @ trackedIndex is fully tracked
+                if (fullyTrackedMapping == null && IsFullyTracked(skeletonData[trackedIndex]))
+                {
+                    isFullyTracked = true;
+                }
+
+                SkeletonMeasurer measurer = new SkeletonMeasurer(skeletonData[trackedIndex]);
                 measurer.determineMeasurements();
                 AddMeasurementsToBuffer(measurer.TestMeasurements);
 
-                skeletonBuffer.Add(trackedSkeleton);
+                skeletonBuffer.Add(ObjectCopier.Clone<Skeleton>(skeletonData[trackedIndex]));
                 frameTimeStampBuffer.Add(frameTimeStamp);
             }
 
@@ -380,7 +407,32 @@ namespace KinectWpfViewers
                     skeletonCanvas.Center = centerPoint;
                     skeletonCanvas.ScaleFactor = scale;
                 }
+
+                if (isFullyTracked)
+                {
+                    fullyTrackedMapping = new Dictionary<JointType, JointMapping>();
+
+                    foreach (JointType type in jointMappings[trackedIndex].Keys)
+                    {
+                        fullyTrackedMapping[type] = new JointMapping();
+                        fullyTrackedMapping[type].Joint = jointMappings[trackedIndex][type].Joint;
+                        fullyTrackedMapping[type].MappedPoint = jointMappings[trackedIndex][type].MappedPoint;
+                    }
+                }
             }
+        }
+
+        private bool IsFullyTracked(Skeleton skeleton)
+        {
+            foreach (Joint joint in skeleton.Joints)
+            {
+                if (!joint.TrackingState.Equals(JointTrackingState.Tracked))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void AddMeasurementsToBuffer(List<TestMeasurement> testMeasurements)

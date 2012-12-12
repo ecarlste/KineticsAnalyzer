@@ -1,20 +1,13 @@
 ﻿
+using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Kinect;
 
 namespace KinectSkeletonAnalyzer
 {
-    public class InjuryRiskAnalyzer
+    public class InjuryRiskAnalyzer : INotifyPropertyChanged
     {
-        private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
-        
-        private Dictionary<JointType, InjuryRiskType> injuryRisks;
-        public Dictionary<JointType, InjuryRiskType> InjuryRisks
-        {
-            get { return injuryRisks; }
-        }
-
         private readonly Dictionary<TestMeasurementType, JointType> riskJoints = new Dictionary<TestMeasurementType, JointType>()
         {
             { TestMeasurementType.HipFlexionLeft, JointType.KneeLeft },
@@ -25,19 +18,71 @@ namespace KinectSkeletonAnalyzer
             { TestMeasurementType.KneeValgusRight, JointType.KneeRight }
         };
 
+        private double progressValue;
+        private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
+        private Dictionary<JointType, InjuryRiskType> injuryRisks;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public InjuryRiskAnalyzer()
+        {
+            ProgressValue = 0.0;
+        }
+
         public InjuryRiskAnalyzer(Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer)
+            : this()
         {
             this.testMeasurementBuffer = testMeasurementBuffer;
         }
 
+        public double ProgressValue
+        {
+            get { return progressValue; }
+            set
+            {
+                progressValue = value;
+                OnPropertyChanged("ProgressValue");
+            }
+        }
+
+        public Dictionary<TestMeasurementType, List<double>> TestMeasurementBuffer
+        {
+            get { return testMeasurementBuffer; }
+            set { testMeasurementBuffer = value; }
+        }
+        
+        public Dictionary<JointType, InjuryRiskType> InjuryRisks
+        {
+            get { return injuryRisks; }
+        }
+
+        private void AddInjuryRisk(TestMeasurementType type, InjuryRiskType injuryRisk)
+        {
+            JointType jointAtRisk = riskJoints[type];
+
+            // first check to see if the key "type" exists, if it does then we need to check to see if the new
+            // injury risk level is higher than the current one. If it's not, then we don't need to do anything at all.
+            if (injuryRisks.ContainsKey(jointAtRisk) && injuryRisks[jointAtRisk] >= injuryRisk)
+            {
+                return;
+            }
+
+            // otherwise we need to update or create the injuryRisk entry in the dictionary
+            injuryRisks[jointAtRisk] = injuryRisk;
+        }
+
         public void Analyze()
         {
+            ProgressValue = 0.0;
+
             injuryRisks = new Dictionary<JointType, InjuryRiskType>();
 
             foreach (TestMeasurementType type in testMeasurementBuffer.Keys)
             {
                 DetermineInjuryRisk(type);
             }
+
+            ProgressValue = 1.0;
         }
 
         private void DetermineInjuryRisk(TestMeasurementType type)
@@ -68,8 +113,7 @@ namespace KinectSkeletonAnalyzer
 
             injuryRisk = InjuryRiskType.None;
 
-            JointType jointAtRisk = riskJoints[type];
-            injuryRisks[jointAtRisk] = injuryRisk;
+            AddInjuryRisk(type, injuryRisk);
         }
 
         private void DetermineRiskFromKneeFlexion(TestMeasurementType type)
@@ -90,8 +134,7 @@ namespace KinectSkeletonAnalyzer
                 injuryRisk = InjuryRiskType.Moderate;
             }
 
-            JointType jointAtRisk = riskJoints[type];
-            injuryRisks[jointAtRisk] = injuryRisk;
+            AddInjuryRisk(type, injuryRisk);
         }
 
         private void DetermineRiskFromHipFlexion(TestMeasurementType type)
@@ -112,8 +155,16 @@ namespace KinectSkeletonAnalyzer
                 injuryRisk = InjuryRiskType.Moderate;
             }
 
-            JointType jointAtRisk = riskJoints[type];
-            injuryRisks[jointAtRisk] = injuryRisk;
+            AddInjuryRisk(type, injuryRisk);
+        }
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
         }
     }
 }

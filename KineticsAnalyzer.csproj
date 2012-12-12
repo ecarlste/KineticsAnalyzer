@@ -58,6 +58,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\AnalyzedSkeletonDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -65,6 +69,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Controls\AnalyzedKinectSkeleton.cs" />
+    <Compile Include="Controls\AnalyzedSkeletonDisplay.xaml.cs">
+      <DependentUpon>AnalyzedSkeletonDisplay.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -99,6 +107,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="KinectSkeletonAnalyzer\KinectSkeletonAnalyzer.csproj">
+      <Project>{8b480fd7-7e41-4039-b264-23ffb88015f2}</Project>
+      <Name>KinectSkeletonAnalyzer</Name>
+    </ProjectReference>
     <ProjectReference Include="KinectWpfViewers\KinectWpfViewers.csproj">
       <Project>{4de23893-27e7-423f-9bb6-ba21dac2c45e}</Project>
       <Name>KinectWpfViewers</Name>

@@ -1,11 +1,8 @@
 ﻿
 using System;
-using System.IO;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
 using System.Windows.Data;
 using Microsoft.Kinect;
 using Microsoft.Kinect.Toolkit;
@@ -52,6 +49,7 @@ namespace KineticsAnalyzer
             var kinectSensorBinding = new Binding("Kinect") { Source = this.sensorChooser };
             BindingOperations.SetBinding(this.KinectSensorManager, KinectSensorManager.KinectSensorProperty, kinectSensorBinding);
 
+            this.statusBar.DataContext = this.SkeletonViewer.RiskAnalyzer;
         }
 
         /// <summary>
@@ -94,11 +92,7 @@ namespace KineticsAnalyzer
             kinectSensorManager.SkeletonStreamEnabled = true;
             kinectSensorManager.DepthStreamEnabled = true;
             
-            
             kinectSensorManager.DepthFormat = DepthImageFormat.Resolution640x480Fps30;
-
-            // Set statusbar to ready
-            statusBarText.Text = Properties.Resources.KinectReady;
         }
 
         /// <summary>
@@ -108,7 +102,6 @@ namespace KineticsAnalyzer
         private void UninitializeKinectServices(KinectSensor sensor)
         {
             //sensor.DepthFrameReady -= KinectSensorDepthFrameReady;
-            statusBarText.Text = Properties.Resources.NoKinectReady;
         }
 
         /// <summary>
@@ -181,6 +174,19 @@ namespace KineticsAnalyzer
                         else
                         {
                             SkeletonViewer.StopMeasuring();
+
+                            // once the SkeletonViewer's RiskAnalyzer has finished running, we can give the results
+                            // to the AnalyzedSkeletonDisplay object and determine the skeleton frame to use for
+                            // display
+                            this.AnalysisResultsDisplay.RiskAnalyzer = SkeletonViewer.RiskAnalyzer;
+
+                            // TODO: when we close the results display, the visibility should change for the
+                            // depthviewer/skeletonviewer
+                            this.AnalysisResultsDisplay.JointMapping = SkeletonViewer.FullyTrackedMapping;
+                            this.AnalysisResultsDisplay.AddAnalyzedKinectSkeleton();
+
+                            // hide the depthviewer/skeletonviewer and show the analysis results display
+                            this.AnalysisResultsDisplay.Visibility = Visibility.Visible;
                         }
                         
                         // Change button content
@@ -189,7 +195,6 @@ namespace KineticsAnalyzer
                     // set event to handled    
                     e.Handled = true;
                     break;
-                
             }
         }
     }
