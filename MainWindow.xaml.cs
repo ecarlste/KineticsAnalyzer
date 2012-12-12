@@ -179,6 +179,19 @@ namespace KineticsAnalyzer
                         else
                         {
                             SkeletonViewer.StopMeasuring();
+
+                            // once the SkeletonViewer's RiskAnalyzer has finished running, we can give the results
+                            // to the AnalyzedSkeletonDisplay object and determine the skeleton frame to use for
+                            // display
+                            this.AnalysisResultsDisplay.DetermineSkeletonFrameUsed(SkeletonViewer.SkeletonBuffer);
+                            this.AnalysisResultsDisplay.RiskAnalyzer = SkeletonViewer.RiskAnalyzer;
+
+                            // TODO: when we close the results display, the visibility should change for the
+                            // depthviewer/skeletonviewer
+
+                            // hide the depthviewer/skeletonviewer and show the analysis results display
+                            this.AnalysisResultsDisplay.Visibility = Visibility.Visible;
+                            this.DepthViewer.Visibility = Visibility.Hidden;
                         }
                         
                         // Change button content

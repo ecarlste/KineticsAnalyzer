@@ -68,19 +68,9 @@ namespace KinectWpfViewers
         private Dictionary<TestMeasurementType, List<double>> testMeasurementBuffer;
         private List<Skeleton> skeletonBuffer;
         private List<long> frameTimeStampBuffer;
-
         private bool isMeasuring;
-        public bool IsMeasuring
-        {
-            get { return isMeasuring; }
-        }
-
         private InjuryRiskAnalyzer riskAnalyzer;
-        public InjuryRiskAnalyzer RiskAnalyzer
-        {
-            get { return riskAnalyzer; }
-        }
-
+        
         public KinectSkeletonViewer()
         {
             InitializeComponent();
@@ -112,6 +102,21 @@ namespace KinectWpfViewers
         {
             get { return (ImageType)GetValue(ImageTypeProperty); }
             set { SetValue(ImageTypeProperty, value); }
+        }
+
+        public bool IsMeasuring
+        {
+            get { return isMeasuring; }
+        }
+
+        public InjuryRiskAnalyzer RiskAnalyzer
+        {
+            get { return riskAnalyzer; }
+        }
+
+        public List<Skeleton> SkeletonBuffer
+        {
+            get { return skeletonBuffer; }
         }
 
         public void StartMeasuring()
@@ -233,7 +238,6 @@ namespace KinectWpfViewers
             }
 
             bool haveSkeletonData = false;
-            Skeleton trackedSkeleton = null;
             long frameTimeStamp = -1;
 
             using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
@@ -247,29 +251,30 @@ namespace KinectWpfViewers
 
                     skeletonFrame.CopySkeletonDataTo(this.skeletonData);
 
-                    // find the first tracked skeleton and set var trackedSkeleton accordingly
-                    foreach (Skeleton skeleton in skeletonData)
-                    {
-                        if (skeleton.TrackingState.Equals(SkeletonTrackingState.Tracked))
-                        {
-                            trackedSkeleton = skeleton;
-                            break;
-                        }
-                    }
-
                     frameTimeStamp = skeletonFrame.Timestamp;
 
                     haveSkeletonData = true;
                 }
             }
 
-            if (isMeasuring && trackedSkeleton != null)
+            int trackedIndex = -1;
+            // find the first tracked skeleton and set var trackedSkeleton accordingly
+            for (int i = 0; i < skeletonData.Length; i++)
             {
-                SkeletonMeasurer measurer = new SkeletonMeasurer(trackedSkeleton);
+                if (skeletonData[i].TrackingState.Equals(SkeletonTrackingState.Tracked))
+                {
+                    trackedIndex = i;
+                    break;
+                }
+            }
+
+            if (isMeasuring && trackedIndex > -1)
+            {
+                SkeletonMeasurer measurer = new SkeletonMeasurer(skeletonData[trackedIndex]);
                 measurer.determineMeasurements();
                 AddMeasurementsToBuffer(measurer.TestMeasurements);
 
-                skeletonBuffer.Add(trackedSkeleton);
+                skeletonBuffer.Add(ObjectCopier.Clone<Skeleton>(skeletonData[trackedIndex]));
                 frameTimeStampBuffer.Add(frameTimeStamp);
             }
 
