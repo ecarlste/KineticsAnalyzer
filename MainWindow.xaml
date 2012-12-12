@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Toolkit="clr-namespace:Microsoft.Kinect.Toolkit;assembly=Microsoft.Kinect.Toolkit"
         xmlns:kt="clr-namespace:KinectWpfViewers;assembly=KinectWpfViewers"
+        xmlns:Controls="clr-namespace:KineticsAnalyzer.Controls"
         x:Class="KineticsAnalyzer.MainWindow" Title="MainWindow" Height="350" Width="750" Loaded="Window_Loaded"
         Closed="WindowClosed" Closing="WindowClosing">
     <Window.Resources>
@@ -57,12 +58,10 @@
                         <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.5" BeginTime="0:0:5" />
                         <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="FontSize" From="180" To="200" Duration="0:0:0.1" BeginTime="0:0:5.5" />
                         <DoubleAnimation Storyboard.TargetName="TestPromptTextBlock" Storyboard.TargetProperty="Opacity" From="1" To="0" Duration="0:0:0.1" BeginTime="0:0:5.5" />
-
                     </Storyboard>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
     </Window.Resources>
     
     <Grid>
@@ -84,10 +83,18 @@
                 <Canvas>
                     <kt:KinectSkeletonViewer 
                         KinectSensorManager="{Binding}"
-                        Visibility="{Binding DepthStreamEnabled,Converter={StaticResource BoolToVisibilityConverter}}"
+                        Visibility="{Binding ElementName=DepthViewer, Path=Visibility}"
                         Width="{Binding ElementName=DepthViewer,Path=ActualWidth}"
                         Height="{Binding ElementName=DepthViewer,Path=ActualHeight}"
                         ShowBones="True" ShowJoints="True" ShowCenter="True" ImageType="Depth" x:Name="SkeletonViewer"/>
+                        
+                    <Controls:AnalyzedSkeletonDisplay
+                        x:Name="AnalysisResultsDisplay"
+                        Background="Black"
+                        Width="{Binding ElementName=DepthViewer, Path=ActualWidth}"
+                        Height="{Binding ElementName=DepthViewer, Path=ActualHeight}"
+                        Visibility="Hidden"
+                        />
                 </Canvas>
                 <TextBlock x:Name="TestPromptTextBlock" Foreground="#FF708393" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
