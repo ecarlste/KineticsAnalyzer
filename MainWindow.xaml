@@ -95,8 +95,10 @@
                         Height="{Binding ElementName=DepthViewer, Path=ActualHeight}"
                         Visibility="Hidden"
                         />
-                </Canvas>
-                <TextBlock x:Name="TestPromptTextBlock" Foreground="#FF708393" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                    
+                    </Canvas>
+                    <TextBlock x:Name="TestPromptTextBlock" Foreground="#FF708393" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Grid>
         </Viewbox>
 
