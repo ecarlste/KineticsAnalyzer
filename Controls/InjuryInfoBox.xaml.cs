@@ -22,19 +22,19 @@ namespace KineticsAnalyzer.Controls
     /// </summary>
     public partial class InjuryInfoBox : UserControl
     {
-        private JointType _jointType;
-        private InjuryRiskType _riskFactor;
+        private string _jointType;
+        private string _riskFactor;
         private List<string> _riskReasons;
         private List<string> _correctiveExercise;
         private Point _jointPosition;
         
-        public JointType JointType
+        public string JointType
         {
             get { return _jointType; }
             set { _jointType = value; }
         }
 
-        public InjuryRiskType RiskFactor
+        public string RiskFactor
         {
             get { return _riskFactor; }
             set { _riskFactor = value; }
