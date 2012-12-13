@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KinectSkeletonAnalyzer;
+using Microsoft.Kinect;
 
 namespace KineticsAnalyzer.Controls
 {
@@ -21,32 +22,40 @@ namespace KineticsAnalyzer.Controls
     /// </summary>
     public partial class InjuryInfoBox : UserControl
     {
-        private string _riskType;
-        public string RiskType
+        private JointType _jointType;
+        private InjuryRiskType _riskFactor;
+        private List<string> _riskReasons;
+        private List<string> _correctiveExercise;
+        private Point _jointPosition;
+        
+        public JointType JointType
         {
-            get { return _riskType; }
-            set { _riskType = value; }
+            get { return _jointType; }
+            set { _jointType = value; }
         }
 
-        private InjuryRiskType _riskFactor;
         public InjuryRiskType RiskFactor
         {
             get { return _riskFactor; }
             set { _riskFactor = value; }
         }
 
-        private List<string> _riskReasons;
         public List<string> RiskReasons
         {
             get { return _riskReasons; }
             set { _riskReasons = value; }
         }
 
-        private List<string> _correctiveExercise;
         public List<string> CorrectiveExercise
         {
             get { return _correctiveExercise; }
             set { _correctiveExercise = value; }
+        }
+
+        public Point JointPosition
+        {
+            get { return _jointPosition; }
+            set { _jointPosition = value; }
         }
 
         public InjuryInfoBox()
