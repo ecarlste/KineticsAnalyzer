@@ -59,6 +59,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\AnalyzedSkeletonDisplay.xaml">
+    <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\InjuryInfoBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -73,6 +77,9 @@
     <Compile Include="Controls\AnalyzedKinectSkeleton.cs" />
     <Compile Include="Controls\AnalyzedSkeletonDisplay.xaml.cs">
       <DependentUpon>AnalyzedSkeletonDisplay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\InjuryInfoBox.xaml.cs">
+      <DependentUpon>InjuryInfoBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
